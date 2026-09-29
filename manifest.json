@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "io.github.dfrost90.cpp-daily",
+  "name": "C++ Daily",
+  "version": "0.1.0",
+  "author": "dfrost90",
+  "license": "MIT",
+  "description": "Build a C++ practice habit with original exercises, LearnCpp reading links, local progress, and spaced reviews.",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "BarWidget.qml"
+  },
+  "barWidget": {
+    "displayName": "C++ Daily",
+    "category": "Productivity",
+    "defaultSection": "left",
+    "allowMultiple": false,
+    "defaults": {
+      "reminders": true,
+      "reminderTime": "19:00"
+    },
+    "schema": [
+      {
+        "key": "reminders",
+        "type": "boolean",
+        "label": "Daily practice reminder"
+      },
+      {
+        "key": "reminderTime",
+        "type": "string",
+        "label": "Reminder time (local HH:MM)"
+      }
+    ]
+  },
+  "homepage": "https://github.com/dfrost90/omarchy-cpp-daily"
+}

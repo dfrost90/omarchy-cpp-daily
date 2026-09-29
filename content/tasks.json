@@ -1,0 +1,290 @@
+[
+  {
+    "id": "first-function",
+    "title": "A tiny health check",
+    "chapter": 2,
+    "url": "https://www.learncpp.com/cpp-tutorial/introduction-to-functions/",
+    "minutes": 10,
+    "prompt": "Implement healthCode() to return the integer 200. The test harness supplies main(); your file only needs the function.",
+    "hints": [
+      "Declare an int return type and use a return statement."
+    ],
+    "explanation": "C++ needs a declared return type. The compiler turns this function into native code before it can run.",
+    "starter": "int healthCode() { return 0; }\n",
+    "solution": "int healthCode() { return 200; }\n",
+    "tests": "assert(healthCode() == 200);",
+    "beginnerOnly": true
+  },
+  {
+    "id": "parameters",
+    "title": "Count the pages",
+    "chapter": 2,
+    "url": "https://www.learncpp.com/cpp-tutorial/introduction-to-function-parameters-and-arguments/",
+    "minutes": 10,
+    "prompt": "Implement pageCount(items, perPage) for nonnegative item counts and positive page sizes. Include a partially filled final page. Inputs are at most 10,000.",
+    "hints": [
+      "Integer division discards the remainder. Add one page if the remainder is nonzero."
+    ],
+    "explanation": "Both operands being int means division produces an int. The % operator lets you detect the leftover items.",
+    "starter": "int pageCount(int items, int perPage) { return 0; }\n",
+    "solution": "int pageCount(int items, int perPage) { return items / perPage + (items % perPage != 0); }\n",
+    "tests": "assert(pageCount(0, 10) == 0); assert(pageCount(20, 10) == 2); assert(pageCount(21, 10) == 3); assert(pageCount(1, 10) == 1);",
+    "beginnerOnly": true
+  },
+  {
+    "id": "initialization",
+    "title": "Initialize the retry budget",
+    "chapter": 1,
+    "url": "https://www.learncpp.com/cpp-tutorial/variable-assignment-and-initialization/",
+    "minutes": 10,
+    "prompt": "Inside retryBudget(), declare an int named retries, value-initialize it with {}, then add 3 and return it. Why would int retries; be unsafe here?",
+    "hints": [
+      "Empty braces initialize an int to zero."
+    ],
+    "explanation": "An uninitialized automatic int has no usable starting value. Unlike an absent JS value, reading it is not a predictable undefined value you can branch on.",
+    "starter": "int retryBudget() { /* TODO */ return -1; }\n",
+    "solution": "int retryBudget() { int retries{}; retries += 3; return retries; }\n",
+    "tests": "assert(retryBudget() == 3);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "division",
+    "title": "Keep the fractional seconds",
+    "chapter": 4,
+    "url": "https://www.learncpp.com/cpp-tutorial/introduction-to-type-conversion-and-static_cast/",
+    "minutes": 10,
+    "prompt": "Implement seconds(milliseconds) returning double. Preserve the fraction: 1250 ms is 1.25 seconds. Inputs are nonnegative.",
+    "hints": [
+      "Convert before dividing, or use a floating-point divisor."
+    ],
+    "explanation": "Converting an already-truncated integer result to double cannot restore the fraction. Operand types determine how the expression is evaluated.",
+    "starter": "double seconds(int milliseconds) { return milliseconds / 1000; }\n",
+    "solution": "double seconds(int milliseconds) { return static_cast<double>(milliseconds) / 1000; }\n",
+    "tests": "assert(std::abs(seconds(1250) - 1.25) < 1e-9); assert(seconds(0) == 0); assert(std::abs(seconds(1) - 0.001) < 1e-9);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "value-parameters",
+    "title": "A copy of the counter",
+    "chapter": 2,
+    "url": "https://www.learncpp.com/cpp-tutorial/introduction-to-function-parameters-and-arguments/",
+    "minutes": 10,
+    "prompt": "Implement bumped(int counter) returning counter + 1. In a separate scratch program, call it with a local variable and verify the original is unchanged.",
+    "hints": [
+      "The parameter is a separate int object initialized from the argument."
+    ],
+    "explanation": "Passing an int by value copies the value. Changing the parameter does not assign to the caller\u2019s variable.",
+    "starter": "int bumped(int counter) { return counter; }\n",
+    "solution": "int bumped(int counter) { ++counter; return counter; }\n",
+    "tests": "int n{8}; assert(bumped(n) == 9); assert(n == 8); assert(bumped(-1) == 0);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "constants",
+    "title": "A compile-time upload limit",
+    "chapter": 5,
+    "url": "https://www.learncpp.com/cpp-tutorial/constexpr-variables/",
+    "minutes": 10,
+    "prompt": "Define constexpr int maxUploadKiB as 2048. Implement fitsUpload(int kib) for the inclusive range 0..maxUploadKiB. Explain why constexpr is stronger than const.",
+    "hints": [
+      "A constexpr variable must have a constant-expression initializer."
+    ],
+    "explanation": "const prevents mutation through that variable. constexpr also requires a value usable at compile time. JS const does not impose this compile-time requirement.",
+    "starter": "// TODO: maxUploadKiB\nbool fitsUpload(int kib) { return false; }\n",
+    "solution": "constexpr int maxUploadKiB{2048};\nbool fitsUpload(int kib) { return kib >= 0 && kib <= maxUploadKiB; }\n",
+    "tests": "static_assert(maxUploadKiB == 2048); assert(fitsUpload(0)); assert(fitsUpload(2048)); assert(!fitsUpload(2049)); assert(!fitsUpload(-1));",
+    "beginnerOnly": false
+  },
+  {
+    "id": "strings",
+    "title": "Build a route",
+    "chapter": 5,
+    "url": "https://www.learncpp.com/cpp-tutorial/introduction-to-stdstring/",
+    "minutes": 10,
+    "prompt": "Implement route(std::string name) returning /api/ followed by name. Empty name should return /api/. Include the header you use.",
+    "hints": [
+      "Use a std::string for the prefix; + concatenates strings."
+    ],
+    "explanation": "std::string owns its characters and can grow. A string literal is not itself a std::string object.",
+    "starter": "#include <string>\nstd::string route(std::string name) { return name; }\n",
+    "solution": "#include <string>\nstd::string route(std::string name) { return std::string{\"/api/\"} + name; }\n",
+    "tests": "assert(route(\"users\") == \"/api/users\"); assert(route(\"\") == \"/api/\");",
+    "beginnerOnly": false
+  },
+  {
+    "id": "logic",
+    "title": "An access rule",
+    "chapter": 6,
+    "url": "https://www.learncpp.com/cpp-tutorial/logical-operators/",
+    "minutes": 10,
+    "prompt": "Implement canPublish(isAdmin, isOwner, isLocked): an admin or owner may publish, but nobody may publish a locked item.",
+    "hints": [
+      "Group the admin-or-owner condition before combining it with the lock check."
+    ],
+    "explanation": "Parentheses make the intended grouping explicit. && binds more tightly than ||, which can make an ungrouped rule accidentally allow admins through the lock.",
+    "starter": "bool canPublish(bool isAdmin, bool isOwner, bool isLocked) { return false; }\n",
+    "solution": "bool canPublish(bool isAdmin, bool isOwner, bool isLocked) { return (isAdmin || isOwner) && !isLocked; }\n",
+    "tests": "for (bool a : {false,true}) for (bool o : {false,true}) for (bool l : {false,true}) assert(canPublish(a,o,l) == ((a || o) && !l));",
+    "beginnerOnly": false
+  },
+  {
+    "id": "scope",
+    "title": "Avoid a shadowed result",
+    "chapter": 7,
+    "url": "https://www.learncpp.com/cpp-tutorial/variable-shadowing-name-hiding/",
+    "minutes": 15,
+    "prompt": "Fix status(bool ok) so it returns 200 on success and 503 otherwise. The inner declaration currently hides the outer variable.",
+    "hints": [
+      "Assign to the existing result instead of declaring another int."
+    ],
+    "explanation": "A nested declaration can reuse a name while referring to a different object. Updating that inner object does not change the outer one.",
+    "starter": "int status(bool ok) { int result{503}; if (ok) { int result{200}; } return result; }\n",
+    "solution": "int status(bool ok) { int result{503}; if (ok) { result = 200; } return result; }\n",
+    "tests": "assert(status(true) == 200); assert(status(false) == 503);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "namespaces",
+    "title": "Two timeout policies",
+    "chapter": 7,
+    "url": "https://www.learncpp.com/cpp-tutorial/user-defined-namespaces-and-the-scope-resolution-operator/",
+    "minutes": 15,
+    "prompt": "Define timeout() in namespaces api and worker. Return 30 from api::timeout() and 120 from worker::timeout().",
+    "hints": [
+      "Put each function inside namespace name { ... }."
+    ],
+    "explanation": "Namespaces distinguish otherwise identical names. Use :: to select a namespace member; this is not object property access.",
+    "starter": "// TODO: two namespaces and their timeout functions\n",
+    "solution": "namespace api { int timeout() { return 30; } }\nnamespace worker { int timeout() { return 120; } }\n",
+    "tests": "assert(api::timeout() == 30); assert(worker::timeout() == 120);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "branches",
+    "title": "Classify a response",
+    "chapter": 8,
+    "url": "https://www.learncpp.com/cpp-tutorial/switch-statement-basics/",
+    "minutes": 15,
+    "prompt": "Implement category(int code): return 2 for 200 or 201, 4 for 400 or 404, and 0 otherwise. Practise using switch.",
+    "hints": [
+      "Several case labels can share the same return statement."
+    ],
+    "explanation": "A return exits the function, so these cases need no break. Without return or break, control continues into the next case.",
+    "starter": "int category(int code) { return 0; }\n",
+    "solution": "int category(int code) { switch(code) { case 200: case 201: return 2; case 400: case 404: return 4; default: return 0; } }\n",
+    "tests": "assert(category(200)==2); assert(category(201)==2); assert(category(400)==4); assert(category(404)==4); assert(category(500)==0);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "loops",
+    "title": "Total the retry delays",
+    "chapter": 8,
+    "url": "https://www.learncpp.com/cpp-tutorial/for-statements/",
+    "minutes": 15,
+    "prompt": "Implement totalDelay(int attempts): delays are 1, 2, ..., attempts seconds. Return their sum using a loop. attempts is in 0..100.",
+    "hints": [
+      "Initialize an accumulator to zero, and include the final attempt."
+    ],
+    "explanation": "A loop condition is evaluated before each iteration. For zero attempts, the body should not execute.",
+    "starter": "int totalDelay(int attempts) { return 0; }\n",
+    "solution": "int totalDelay(int attempts) { int total{}; for(int i{1}; i <= attempts; ++i) total += i; return total; }\n",
+    "tests": "assert(totalDelay(0)==0); assert(totalDelay(1)==1); assert(totalDelay(4)==10); assert(totalDelay(100)==5050);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "validation",
+    "title": "Guard a bounded value",
+    "chapter": 9,
+    "url": "https://www.learncpp.com/cpp-tutorial/assert-and-static_assert/",
+    "minutes": 15,
+    "prompt": "Implement clampPercent(int value), clamping integers to 0..100. Add your own assertions for values just inside and outside both boundaries.",
+    "hints": [
+      "Check below zero first, then above 100, otherwise keep the original value."
+    ],
+    "explanation": "Boundary tests distinguish < from <= mistakes and catch accidental changes to valid input. Assertions test assumptions; they are not a substitute for validating user input.",
+    "starter": "int clampPercent(int value) { return value; }\n",
+    "solution": "int clampPercent(int value) { if(value < 0) return 0; if(value > 100) return 100; return value; }\n",
+    "tests": "assert(clampPercent(-1)==0); assert(clampPercent(0)==0); assert(clampPercent(1)==1); assert(clampPercent(99)==99); assert(clampPercent(100)==100); assert(clampPercent(101)==100);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "conversions",
+    "title": "Compute a success ratio",
+    "chapter": 10,
+    "url": "https://www.learncpp.com/cpp-tutorial/explicit-type-conversion-casting-and-static-cast/",
+    "minutes": 15,
+    "prompt": "Implement ratio(int success, int total), returning double. Return 0.0 when total is zero; otherwise return the fractional quotient. Inputs satisfy 0 <= success <= total.",
+    "hints": [
+      "Guard zero, then cast an operand before division."
+    ],
+    "explanation": "Casts make a conversion explicit. A double return type alone does not make an integer division floating-point.",
+    "starter": "double ratio(int success, int total) { return 0.0; }\n",
+    "solution": "double ratio(int success, int total) { if(total == 0) return 0.0; return static_cast<double>(success) / total; }\n",
+    "tests": "assert(ratio(0,0)==0.0); assert(std::abs(ratio(2,8)-0.25)<1e-9); assert(ratio(5,5)==1.0);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "deduction",
+    "title": "What does auto deduce?",
+    "chapter": 10,
+    "url": "https://www.learncpp.com/cpp-tutorial/type-deduction-for-objects-using-the-auto-keyword/",
+    "minutes": 15,
+    "prompt": "Define auto batchSize initialized from 16 and auto retrySeconds initialized from 0.5. Implement auto nextBatch() to return batchSize + 1. Predict each deduced type before checking.",
+    "hints": [
+      "auto deduces from the initializer expression, not future assignments."
+    ],
+    "explanation": "These types are fixed at compile time. auto is type inference, not a dynamically typed container.",
+    "starter": "// TODO: batchSize, retrySeconds and nextBatch()\n",
+    "solution": "auto batchSize{16};\nauto retrySeconds{0.5};\nauto nextBatch() { return batchSize + 1; }\n",
+    "tests": "static_assert(std::is_same_v<decltype(batchSize), int>); static_assert(std::is_same_v<decltype(retrySeconds), double>); static_assert(std::is_same_v<decltype(nextBatch()), int>); assert(nextBatch()==17);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "overloads",
+    "title": "One name, two payload types",
+    "chapter": 11,
+    "url": "https://www.learncpp.com/cpp-tutorial/introduction-to-function-overloading/",
+    "minutes": 15,
+    "prompt": "Define payloadSize(int) returning sizeof(int) as an int, and payloadSize(std::string) returning the string length as an int. Include <string>. Test both overloads.",
+    "hints": [
+      "The parameter types must differ; changing only the return type cannot create an overload."
+    ],
+    "explanation": "C++ overloads are distinct function implementations selected from the argument types. This differs from TypeScript overload signatures backed by a single implementation.",
+    "starter": "#include <string>\n// TODO: payloadSize overloads\n",
+    "solution": "#include <string>\nint payloadSize(int) { return static_cast<int>(sizeof(int)); }\nint payloadSize(std::string value) { return static_cast<int>(value.size()); }\n",
+    "tests": "assert(payloadSize(42)==static_cast<int>(sizeof(int))); assert(payloadSize(std::string{\"hello\"})==5); assert(payloadSize(std::string{})==0);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "resolution",
+    "title": "Resolve the numeric overload",
+    "chapter": 11,
+    "url": "https://www.learncpp.com/cpp-tutorial/function-overload-resolution-and-ambiguous-matches/",
+    "minutes": 15,
+    "prompt": "Define pick(int) returning 1 and pick(double) returning 2. Implement pickHalf() calling pick with 0.5. Predict what pick(1.0f) selects.",
+    "hints": [
+      "float promotes to double; an exact match beats a conversion."
+    ],
+    "explanation": "The compiler ranks viable overloads. An explicit cast can make your intended argument type clear when a call would otherwise be ambiguous.",
+    "starter": "// TODO: pick overloads and pickHalf()\n",
+    "solution": "int pick(int) { return 1; }\nint pick(double) { return 2; }\nint pickHalf() { return pick(0.5); }\n",
+    "tests": "assert(pick(1)==1); assert(pick(1.0)==2); assert(pick(1.0f)==2); assert(pickHalf()==2);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "defaults",
+    "title": "A default retry allowance",
+    "chapter": 11,
+    "url": "https://www.learncpp.com/cpp-tutorial/default-arguments/",
+    "minutes": 15,
+    "prompt": "Implement retryWindow(int delay, int attempts = 3), returning delay * attempts. Inputs are nonnegative and at most 100. Call it with one and two arguments.",
+    "hints": [
+      "Place the default on the trailing parameter."
+    ],
+    "explanation": "A missing argument is supplied from the default at the call site. Adding a one-parameter overload as well would make one-argument calls ambiguous here.",
+    "starter": "// TODO: retryWindow\n",
+    "solution": "int retryWindow(int delay, int attempts = 3) { return delay * attempts; }\n",
+    "tests": "assert(retryWindow(5)==15); assert(retryWindow(5,2)==10); assert(retryWindow(0)==0); assert(retryWindow(5,0)==0);",
+    "beginnerOnly": false
+  }
+]
