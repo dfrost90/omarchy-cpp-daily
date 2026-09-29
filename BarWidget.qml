@@ -124,6 +124,7 @@ Panel {
                             visible: !!root.report.track
                             text: (root.report.completed || 0) + " / " + (root.report.total || 18) + " practiced  ·  " + (root.report.streak || 0) + " day streak  ·  " + (root.report.due || 0) + " due for review"
                         }
+                        Copy { visible: !root.report.track && !!root.message; text: root.message; color: Color.accent }
                         Rectangle {
                             width: parent.width; height: Style.space(4)
                             color: Qt.alpha(root.fg, 0.15)

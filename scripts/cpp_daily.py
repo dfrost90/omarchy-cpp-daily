@@ -30,7 +30,7 @@ def transaction():
     with (DATA / '.lock').open('a') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX)
         state = json.loads(STATE.read_text()) if STATE.exists() else fresh()
-        if state.get('version') != 1 or not isinstance(state.get('records'), dict) or not isinstance(state.get('activity'), list):
+        if not isinstance(state, dict) or state.get('version') != 1 or not isinstance(state.get('records'), dict) or not isinstance(state.get('activity'), list):
             raise ValueError('Unrecognized progress file. Back it up before repairing it; it has not been overwritten.')
         yield state
         fd, name = tempfile.mkstemp(dir=DATA, prefix='.progress-')
