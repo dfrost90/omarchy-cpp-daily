@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "io.github.dfrost90.cpp-daily",
   "name": "C++ Daily",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "dfrost90",
   "license": "MIT",
   "description": "Build a C++ practice habit with original exercises, LearnCpp reading links, local progress, and spaced reviews.",

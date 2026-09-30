@@ -11,9 +11,10 @@
     ],
     "explanation": "C++ needs a declared return type. The compiler turns this function into native code before it can run.",
     "starter": "int healthCode() { return 0; }\n",
-    "solution": "int healthCode() { return 200; }\n",
+    "solution": "int healthCode() {\n    return 200;\n}\n",
     "tests": "assert(healthCode() == 200);",
-    "beginnerOnly": true
+    "beginnerOnly": true,
+    "topic": "Getting started"
   },
   {
     "id": "parameters",
@@ -27,9 +28,10 @@
     ],
     "explanation": "Both operands being int means division produces an int. The % operator lets you detect the leftover items.",
     "starter": "int pageCount(int items, int perPage) { return 0; }\n",
-    "solution": "int pageCount(int items, int perPage) { return items / perPage + (items % perPage != 0); }\n",
+    "solution": "int pageCount(int items, int perPage) {\n    return items / perPage + (items % perPage != 0);\n}\n",
     "tests": "assert(pageCount(0, 10) == 0); assert(pageCount(20, 10) == 2); assert(pageCount(21, 10) == 3); assert(pageCount(1, 10) == 1);",
-    "beginnerOnly": true
+    "beginnerOnly": true,
+    "topic": "Getting started"
   },
   {
     "id": "initialization",
@@ -41,11 +43,12 @@
     "hints": [
       "Empty braces initialize an int to zero."
     ],
-    "explanation": "An uninitialized automatic int has no usable starting value. Unlike an absent JS value, reading it is not a predictable undefined value you can branch on.",
+    "explanation": "An automatic int declared without an initializer has an indeterminate value. Reading that value is undefined behavior in C++20. Empty braces value-initialize an int to zero, so adding to it starts from a known value.",
     "starter": "int retryBudget() { /* TODO */ return -1; }\n",
-    "solution": "int retryBudget() { int retries{}; retries += 3; return retries; }\n",
+    "solution": "int retryBudget() {\n    int retries{};\n    retries += 3;\n    return retries;\n}\n",
     "tests": "assert(retryBudget() == 3);",
-    "beginnerOnly": false
+    "beginnerOnly": false,
+    "topic": "Core recap"
   },
   {
     "id": "division",
@@ -59,9 +62,10 @@
     ],
     "explanation": "Converting an already-truncated integer result to double cannot restore the fraction. Operand types determine how the expression is evaluated.",
     "starter": "double seconds(int milliseconds) { return milliseconds / 1000; }\n",
-    "solution": "double seconds(int milliseconds) { return static_cast<double>(milliseconds) / 1000; }\n",
+    "solution": "double seconds(int milliseconds) {\n    return static_cast<double>(milliseconds) / 1000;\n}\n",
     "tests": "assert(std::abs(seconds(1250) - 1.25) < 1e-9); assert(seconds(0) == 0); assert(std::abs(seconds(1) - 0.001) < 1e-9);",
-    "beginnerOnly": false
+    "beginnerOnly": false,
+    "topic": "Core recap"
   },
   {
     "id": "value-parameters",
@@ -73,11 +77,12 @@
     "hints": [
       "The parameter is a separate int object initialized from the argument."
     ],
-    "explanation": "Passing an int by value copies the value. Changing the parameter does not assign to the caller\u2019s variable.",
+    "explanation": "Passing an int by value copies the value. Changing the parameter does not assign to the caller’s variable.",
     "starter": "int bumped(int counter) { return counter; }\n",
-    "solution": "int bumped(int counter) { ++counter; return counter; }\n",
+    "solution": "int bumped(int counter) {\n    ++counter;\n    return counter;\n}\n",
     "tests": "int n{8}; assert(bumped(n) == 9); assert(n == 8); assert(bumped(-1) == 0);",
-    "beginnerOnly": false
+    "beginnerOnly": false,
+    "topic": "Core recap"
   },
   {
     "id": "constants",
@@ -89,11 +94,12 @@
     "hints": [
       "A constexpr variable must have a constant-expression initializer."
     ],
-    "explanation": "const prevents mutation through that variable. constexpr also requires a value usable at compile time. JS const does not impose this compile-time requirement.",
+    "explanation": "const prevents modification of an initialized variable. constexpr also requires a constant-expression initializer, allowing the value to be used where the compiler requires a compile-time constant.",
     "starter": "// TODO: maxUploadKiB\nbool fitsUpload(int kib) { return false; }\n",
-    "solution": "constexpr int maxUploadKiB{2048};\nbool fitsUpload(int kib) { return kib >= 0 && kib <= maxUploadKiB; }\n",
+    "solution": "constexpr int maxUploadKiB{2048};\nbool fitsUpload(int kib) {\n    return kib >= 0 && kib <= maxUploadKiB;\n}\n",
     "tests": "static_assert(maxUploadKiB == 2048); assert(fitsUpload(0)); assert(fitsUpload(2048)); assert(!fitsUpload(2049)); assert(!fitsUpload(-1));",
-    "beginnerOnly": false
+    "beginnerOnly": false,
+    "topic": "Core recap"
   },
   {
     "id": "strings",
@@ -107,9 +113,10 @@
     ],
     "explanation": "std::string owns its characters and can grow. A string literal is not itself a std::string object.",
     "starter": "#include <string>\nstd::string route(std::string name) { return name; }\n",
-    "solution": "#include <string>\nstd::string route(std::string name) { return std::string{\"/api/\"} + name; }\n",
+    "solution": "#include <string>\nstd::string route(std::string name) {\n    return std::string{\"/api/\"} + name;\n}\n",
     "tests": "assert(route(\"users\") == \"/api/users\"); assert(route(\"\") == \"/api/\");",
-    "beginnerOnly": false
+    "beginnerOnly": false,
+    "topic": "Core recap"
   },
   {
     "id": "logic",
@@ -123,9 +130,10 @@
     ],
     "explanation": "Parentheses make the intended grouping explicit. && binds more tightly than ||, which can make an ungrouped rule accidentally allow admins through the lock.",
     "starter": "bool canPublish(bool isAdmin, bool isOwner, bool isLocked) { return false; }\n",
-    "solution": "bool canPublish(bool isAdmin, bool isOwner, bool isLocked) { return (isAdmin || isOwner) && !isLocked; }\n",
+    "solution": "bool canPublish(bool isAdmin, bool isOwner, bool isLocked) {\n    return (isAdmin || isOwner) && !isLocked;\n}\n",
     "tests": "for (bool a : {false,true}) for (bool o : {false,true}) for (bool l : {false,true}) assert(canPublish(a,o,l) == ((a || o) && !l));",
-    "beginnerOnly": false
+    "beginnerOnly": false,
+    "topic": "Core recap"
   },
   {
     "id": "scope",
@@ -139,9 +147,10 @@
     ],
     "explanation": "A nested declaration can reuse a name while referring to a different object. Updating that inner object does not change the outer one.",
     "starter": "int status(bool ok) { int result{503}; if (ok) { int result{200}; } return result; }\n",
-    "solution": "int status(bool ok) { int result{503}; if (ok) { result = 200; } return result; }\n",
+    "solution": "int status(bool ok) {\n    int result{503};\n    if (ok) {\n        result = 200;\n    }\n    return result;\n}\n",
     "tests": "assert(status(true) == 200); assert(status(false) == 503);",
-    "beginnerOnly": false
+    "beginnerOnly": false,
+    "topic": "Core recap"
   },
   {
     "id": "namespaces",
@@ -155,9 +164,10 @@
     ],
     "explanation": "Namespaces distinguish otherwise identical names. Use :: to select a namespace member; this is not object property access.",
     "starter": "// TODO: two namespaces and their timeout functions\n",
-    "solution": "namespace api { int timeout() { return 30; } }\nnamespace worker { int timeout() { return 120; } }\n",
+    "solution": "namespace api {\nint timeout() {\n    return 30;\n}\n} // namespace api\nnamespace worker {\nint timeout() {\n    return 120;\n}\n} // namespace worker\n",
     "tests": "assert(api::timeout() == 30); assert(worker::timeout() == 120);",
-    "beginnerOnly": false
+    "beginnerOnly": false,
+    "topic": "Core recap"
   },
   {
     "id": "branches",
@@ -171,9 +181,10 @@
     ],
     "explanation": "A return exits the function, so these cases need no break. Without return or break, control continues into the next case.",
     "starter": "int category(int code) { return 0; }\n",
-    "solution": "int category(int code) { switch(code) { case 200: case 201: return 2; case 400: case 404: return 4; default: return 0; } }\n",
+    "solution": "int category(int code) {\n    switch (code) {\n    case 200:\n    case 201:\n        return 2;\n    case 400:\n    case 404:\n        return 4;\n    default:\n        return 0;\n    }\n}\n",
     "tests": "assert(category(200)==2); assert(category(201)==2); assert(category(400)==4); assert(category(404)==4); assert(category(500)==0);",
-    "beginnerOnly": false
+    "beginnerOnly": false,
+    "topic": "Core recap"
   },
   {
     "id": "loops",
@@ -187,9 +198,10 @@
     ],
     "explanation": "A loop condition is evaluated before each iteration. For zero attempts, the body should not execute.",
     "starter": "int totalDelay(int attempts) { return 0; }\n",
-    "solution": "int totalDelay(int attempts) { int total{}; for(int i{1}; i <= attempts; ++i) total += i; return total; }\n",
+    "solution": "int totalDelay(int attempts) {\n    int total{};\n    for (int i{1}; i <= attempts; ++i)\n        total += i;\n    return total;\n}\n",
     "tests": "assert(totalDelay(0)==0); assert(totalDelay(1)==1); assert(totalDelay(4)==10); assert(totalDelay(100)==5050);",
-    "beginnerOnly": false
+    "beginnerOnly": false,
+    "topic": "Core recap"
   },
   {
     "id": "validation",
@@ -203,9 +215,10 @@
     ],
     "explanation": "Boundary tests distinguish < from <= mistakes and catch accidental changes to valid input. Assertions test assumptions; they are not a substitute for validating user input.",
     "starter": "int clampPercent(int value) { return value; }\n",
-    "solution": "int clampPercent(int value) { if(value < 0) return 0; if(value > 100) return 100; return value; }\n",
+    "solution": "int clampPercent(int value) {\n    if (value < 0)\n        return 0;\n    if (value > 100)\n        return 100;\n    return value;\n}\n",
     "tests": "assert(clampPercent(-1)==0); assert(clampPercent(0)==0); assert(clampPercent(1)==1); assert(clampPercent(99)==99); assert(clampPercent(100)==100); assert(clampPercent(101)==100);",
-    "beginnerOnly": false
+    "beginnerOnly": false,
+    "topic": "Core recap"
   },
   {
     "id": "conversions",
@@ -219,9 +232,10 @@
     ],
     "explanation": "Casts make a conversion explicit. A double return type alone does not make an integer division floating-point.",
     "starter": "double ratio(int success, int total) { return 0.0; }\n",
-    "solution": "double ratio(int success, int total) { if(total == 0) return 0.0; return static_cast<double>(success) / total; }\n",
+    "solution": "double ratio(int success, int total) {\n    if (total == 0)\n        return 0.0;\n    return static_cast<double>(success) / total;\n}\n",
     "tests": "assert(ratio(0,0)==0.0); assert(std::abs(ratio(2,8)-0.25)<1e-9); assert(ratio(5,5)==1.0);",
-    "beginnerOnly": false
+    "beginnerOnly": false,
+    "topic": "Core recap"
   },
   {
     "id": "deduction",
@@ -233,11 +247,12 @@
     "hints": [
       "auto deduces from the initializer expression, not future assignments."
     ],
-    "explanation": "These types are fixed at compile time. auto is type inference, not a dynamically typed container.",
+    "explanation": "auto asks the compiler to deduce a type from the initializer. The resulting variable still has a fixed type. Integer and floating-point literals therefore lead to different deduced types.",
     "starter": "// TODO: batchSize, retrySeconds and nextBatch()\n",
-    "solution": "auto batchSize{16};\nauto retrySeconds{0.5};\nauto nextBatch() { return batchSize + 1; }\n",
+    "solution": "auto batchSize{16};\nauto retrySeconds{0.5};\nauto nextBatch() {\n    return batchSize + 1;\n}\n",
     "tests": "static_assert(std::is_same_v<decltype(batchSize), int>); static_assert(std::is_same_v<decltype(retrySeconds), double>); static_assert(std::is_same_v<decltype(nextBatch()), int>); assert(nextBatch()==17);",
-    "beginnerOnly": false
+    "beginnerOnly": false,
+    "topic": "Core recap"
   },
   {
     "id": "overloads",
@@ -249,11 +264,12 @@
     "hints": [
       "The parameter types must differ; changing only the return type cannot create an overload."
     ],
-    "explanation": "C++ overloads are distinct function implementations selected from the argument types. This differs from TypeScript overload signatures backed by a single implementation.",
+    "explanation": "Overloads are distinct functions with the same name and different parameter lists. The compiler selects an overload from the argument types. A different return type alone cannot distinguish two overloads.",
     "starter": "#include <string>\n// TODO: payloadSize overloads\n",
-    "solution": "#include <string>\nint payloadSize(int) { return static_cast<int>(sizeof(int)); }\nint payloadSize(std::string value) { return static_cast<int>(value.size()); }\n",
+    "solution": "#include <string>\nint payloadSize(int) {\n    return static_cast<int>(sizeof(int));\n}\nint payloadSize(std::string value) {\n    return static_cast<int>(value.size());\n}\n",
     "tests": "assert(payloadSize(42)==static_cast<int>(sizeof(int))); assert(payloadSize(std::string{\"hello\"})==5); assert(payloadSize(std::string{})==0);",
-    "beginnerOnly": false
+    "beginnerOnly": false,
+    "topic": "Core recap"
   },
   {
     "id": "resolution",
@@ -267,9 +283,10 @@
     ],
     "explanation": "The compiler ranks viable overloads. An explicit cast can make your intended argument type clear when a call would otherwise be ambiguous.",
     "starter": "// TODO: pick overloads and pickHalf()\n",
-    "solution": "int pick(int) { return 1; }\nint pick(double) { return 2; }\nint pickHalf() { return pick(0.5); }\n",
+    "solution": "int pick(int) {\n    return 1;\n}\nint pick(double) {\n    return 2;\n}\nint pickHalf() {\n    return pick(0.5);\n}\n",
     "tests": "assert(pick(1)==1); assert(pick(1.0)==2); assert(pick(1.0f)==2); assert(pickHalf()==2);",
-    "beginnerOnly": false
+    "beginnerOnly": false,
+    "topic": "Core recap"
   },
   {
     "id": "defaults",
@@ -283,8 +300,1403 @@
     ],
     "explanation": "A missing argument is supplied from the default at the call site. Adding a one-parameter overload as well would make one-argument calls ambiguous here.",
     "starter": "// TODO: retryWindow\n",
-    "solution": "int retryWindow(int delay, int attempts = 3) { return delay * attempts; }\n",
+    "solution": "int retryWindow(int delay, int attempts = 3) {\n    return delay * attempts;\n}\n",
     "tests": "assert(retryWindow(5)==15); assert(retryWindow(5,2)==10); assert(retryWindow(0)==0); assert(retryWindow(5,0)==0);",
+    "beginnerOnly": false,
+    "topic": "Core recap"
+  },
+  {
+    "id": "temperature",
+    "title": "Convert a temperature",
+    "chapter": 4,
+    "url": "https://www.learncpp.com/cpp-tutorial/floating-point-numbers/",
+    "minutes": 15,
+    "topic": "Numbers and expressions",
+    "prompt": "Implement fahrenheit(double celsius) using F = C × 9/5 + 32. Preserve fractional results. Inputs are within -100..100.",
+    "hints": [
+      "Use floating-point operands for the conversion factor."
+    ],
+    "explanation": "Integer division happens before multiplication when parenthesized as (9 / 5). Floating-point literals preserve the fractional scale factor.",
+    "starter": "#include <stdexcept>\ndouble fahrenheit(double celsius)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "double fahrenheit(double celsius) {\n    return celsius * (9.0 / 5.0) + 32.0;\n}\n",
+    "tests": "assert(fahrenheit(0)==32); assert(fahrenheit(-40)==-40); assert(std::abs(fahrenheit(12.5)-54.5)<1e-9);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "clock-minutes",
+    "title": "Extract whole minutes",
+    "chapter": 6,
+    "url": "https://www.learncpp.com/cpp-tutorial/arithmetic-operators/",
+    "minutes": 15,
+    "topic": "Numbers and expressions",
+    "prompt": "Implement wholeMinutes(int seconds) for 0..100000 seconds. Discard any incomplete minute.",
+    "hints": [
+      "Integer division already truncates a nonnegative quotient."
+    ],
+    "explanation": "For nonnegative integers, division gives the number of complete groups. The remainder can be handled separately when needed.",
+    "starter": "#include <stdexcept>\nint wholeMinutes(int seconds)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "int wholeMinutes(int seconds) {\n    return seconds / 60;\n}\n",
+    "tests": "assert(wholeMinutes(0)==0); assert(wholeMinutes(59)==0); assert(wholeMinutes(60)==1); assert(wholeMinutes(125)==2);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "clock-remainder",
+    "title": "Extract remaining seconds",
+    "chapter": 6,
+    "url": "https://www.learncpp.com/cpp-tutorial/remainder-and-exponentiation/",
+    "minutes": 15,
+    "topic": "Numbers and expressions",
+    "prompt": "Implement remainingSeconds(int seconds): return seconds left after removing whole minutes. Inputs are 0..100000.",
+    "hints": [
+      "The remainder operator is %."
+    ],
+    "explanation": "For positive divisors and nonnegative dividends, the remainder lies between zero and one less than the divisor.",
+    "starter": "#include <stdexcept>\nint remainingSeconds(int seconds)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "int remainingSeconds(int seconds) {\n    return seconds % 60;\n}\n",
+    "tests": "assert(remainingSeconds(0)==0); assert(remainingSeconds(60)==0); assert(remainingSeconds(125)==5); assert(remainingSeconds(59)==59);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "even-number",
+    "title": "Recognize even numbers",
+    "chapter": 6,
+    "url": "https://www.learncpp.com/cpp-tutorial/remainder-and-exponentiation/",
+    "minutes": 15,
+    "topic": "Numbers and expressions",
+    "prompt": "Implement isEven(int n), including negative numbers and zero.",
+    "hints": [
+      "A number is even when its remainder after division by 2 is zero."
+    ],
+    "explanation": "Testing equality to zero works for positive and negative even integers. Do not assume every nonzero remainder is positive.",
+    "starter": "#include <stdexcept>\nbool isEven(int n)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "bool isEven(int n) {\n    return n % 2 == 0;\n}\n",
+    "tests": "assert(isEven(0)); assert(isEven(-4)); assert(!isEven(-3)); assert(!isEven(7)); assert(isEven(8));",
+    "beginnerOnly": false
+  },
+  {
+    "id": "three-way-sign",
+    "title": "Return a sign",
+    "chapter": 8,
+    "url": "https://www.learncpp.com/cpp-tutorial/if-statements-and-blocks/",
+    "minutes": 15,
+    "topic": "Numbers and expressions",
+    "prompt": "Implement signOf(int value) returning -1, 0, or 1 for negative, zero, or positive values. Avoid negating the input.",
+    "hints": [
+      "Compare against zero rather than calculating an absolute value."
+    ],
+    "explanation": "Comparisons are safe even for the minimum representable int. Negating that minimum would overflow.",
+    "starter": "#include <limits>\n#include <stdexcept>\nint signOf(int value)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "#include <limits>\nint signOf(int value) {\n    if (value < 0)\n        return -1;\n    if (value > 0)\n        return 1;\n    return 0;\n}\n",
+    "tests": "assert(signOf(-9)==-1); assert(signOf(0)==0); assert(signOf(8)==1); assert(signOf(std::numeric_limits<int>::min())==-1);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "between-values",
+    "title": "Check an inclusive interval",
+    "chapter": 6,
+    "url": "https://www.learncpp.com/cpp-tutorial/logical-operators/",
+    "minutes": 15,
+    "topic": "Numbers and expressions",
+    "prompt": "Implement inRange(int x, int low, int high). Return true only when low <= x <= high; an inverted interval contains nothing.",
+    "hints": [
+      "Combine two comparisons with &&."
+    ],
+    "explanation": "A chained comparison such as low <= x <= high does not express an interval test in C++. The first comparison produces bool, which would then be compared to high.",
+    "starter": "#include <stdexcept>\nbool inRange(int x, int low, int high)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "bool inRange(int x, int low, int high) {\n    return low <= x && x <= high;\n}\n",
+    "tests": "assert(inRange(2,2,5)); assert(inRange(5,2,5)); assert(!inRange(1,2,5)); assert(!inRange(4,5,2));",
+    "beginnerOnly": false
+  },
+  {
+    "id": "wide-product",
+    "title": "Widen before multiplying",
+    "chapter": 10,
+    "url": "https://www.learncpp.com/cpp-tutorial/numeric-conversions/",
+    "minutes": 15,
+    "topic": "Numbers and expressions",
+    "prompt": "Implement area(int width, int height) returning long long. Inputs are nonnegative and at most 100000; the product may exceed int.",
+    "hints": [
+      "Convert an operand before multiplication."
+    ],
+    "explanation": "The multiplication type is determined by its operands, not the return type. Widening before the operation avoids signed int overflow.",
+    "starter": "#include <stdexcept>\nlong long area(int width, int height)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "long long area(int width, int height) {\n    return static_cast<long long>(width) * height;\n}\n",
+    "tests": "assert(area(100000,100000)==10000000000LL); assert(area(0,100000)==0); assert(area(7,9)==63);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "rounded-up-groups",
+    "title": "Round up without addition overflow",
+    "chapter": 6,
+    "url": "https://www.learncpp.com/cpp-tutorial/arithmetic-operators/",
+    "minutes": 15,
+    "topic": "Numbers and expressions",
+    "prompt": "Implement groups(int count, int size) for nonnegative count and positive size. Return ceiling(count/size), including for count equal to INT_MAX.",
+    "hints": [
+      "Use quotient plus a nonzero-remainder check instead of count + size - 1."
+    ],
+    "explanation": "Algebraically equivalent formulas can have different overflow behavior in fixed-width integer arithmetic. A quotient/remainder formulation avoids the large intermediate sum.",
+    "starter": "#include <limits>\n#include <stdexcept>\nint groups(int count, int size)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "#include <limits>\nint groups(int count, int size) {\n    return count / size + (count % size != 0);\n}\n",
+    "tests": "assert(groups(0,3)==0); assert(groups(8,3)==3); assert(groups(9,3)==3); assert(groups(std::numeric_limits<int>::max(),2)==1073741824);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "digit-character",
+    "title": "Read a decimal digit",
+    "chapter": 4,
+    "url": "https://www.learncpp.com/cpp-tutorial/chars/",
+    "minutes": 15,
+    "topic": "Numbers and expressions",
+    "prompt": "Implement digitValue(char c) returning 0..9 for ASCII digit characters and -1 otherwise.",
+    "hints": [
+      "Check the range before subtracting the character zero."
+    ],
+    "explanation": "A char holds a character code. Decimal digit codes are contiguous, so subtraction yields the numeric value after validation.",
+    "starter": "#include <stdexcept>\nint digitValue(char c)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "int digitValue(char c) {\n    if (c < '0' || c > '9')\n        return -1;\n    return c - '0';\n}\n",
+    "tests": "assert(digitValue('0')==0); assert(digitValue('9')==9); assert(digitValue('a')==-1); assert(digitValue('/')==-1);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "absolute-tolerance",
+    "title": "Compare approximate values",
+    "chapter": 6,
+    "url": "https://www.learncpp.com/cpp-tutorial/relational-operators-and-floating-point-comparisons/",
+    "minutes": 15,
+    "topic": "Numbers and expressions",
+    "prompt": "Implement near(double a, double b, double tolerance), true when the absolute difference is <= tolerance. Inputs are finite and tolerance is nonnegative.",
+    "hints": [
+      "Use std::abs from <cmath>."
+    ],
+    "explanation": "Rounding makes exact floating-point equality unsuitable for many computed values. An absolute tolerance describes an acceptable error in the units being measured.",
+    "starter": "#include <cmath>\n#include <stdexcept>\nbool near(double a, double b, double tolerance)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "#include <cmath>\nbool near(double a, double b, double tolerance) {\n    return std::abs(a - b) <= tolerance;\n}\n",
+    "tests": "assert(near(0.1+0.2,0.3,1e-12)); assert(!near(1,2,0.1)); assert(near(-2,-2,0)); assert(near(1,1.5,0.5));",
+    "beginnerOnly": false
+  },
+  {
+    "id": "conditional-choice",
+    "title": "Select the smaller value",
+    "chapter": 6,
+    "url": "https://www.learncpp.com/cpp-tutorial/the-conditional-operator/",
+    "minutes": 15,
+    "topic": "Numbers and expressions",
+    "prompt": "Implement smaller(int a, int b) using the conditional operator. Equal values should be returned unchanged.",
+    "hints": [
+      "The form is condition ? valueIfTrue : valueIfFalse."
+    ],
+    "explanation": "The conditional operator is an expression: it selects and yields one branch value. Only the selected branch is evaluated.",
+    "starter": "#include <stdexcept>\nint smaller(int a, int b)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "int smaller(int a, int b) {\n    return a < b ? a : b;\n}\n",
+    "tests": "assert(smaller(3,7)==3); assert(smaller(7,3)==3); assert(smaller(-2,-2)==-2);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "bit-permission",
+    "title": "Test a bit flag",
+    "chapter": 6,
+    "url": "https://www.learncpp.com/cpp-tutorial/bitwise-operators/",
+    "minutes": 15,
+    "topic": "Numbers and expressions",
+    "prompt": "Implement hasFlag(unsigned value, unsigned mask), true when all bits in mask are set in value. A zero mask should return true.",
+    "hints": [
+      "Compare value & mask with mask."
+    ],
+    "explanation": "Bitwise AND keeps only bits present in both operands. Comparing the masked value with the mask tests every requested bit.",
+    "starter": "#include <stdexcept>\nbool hasFlag(unsigned value, unsigned mask)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "bool hasFlag(unsigned value, unsigned mask) {\n    return (value & mask) == mask;\n}\n",
+    "tests": "assert(hasFlag(0b1101u,0b0101u)); assert(!hasFlag(0b1000u,0b0101u)); assert(hasFlag(0u,0u)); assert(!hasFlag(1u,2u));",
+    "beginnerOnly": false
+  },
+  {
+    "id": "join-labels",
+    "title": "Join two labels",
+    "chapter": 5,
+    "url": "https://www.learncpp.com/cpp-tutorial/introduction-to-stdstring/",
+    "minutes": 15,
+    "topic": "Strings and views",
+    "prompt": "Implement joinLabels(std::string a, std::string b), joining nonempty labels with one space. If either is empty, return the other unchanged.",
+    "hints": [
+      "Handle empty strings before concatenating."
+    ],
+    "explanation": "Empty strings are valid values. Explicit handling prevents separators at the beginning or end of the result.",
+    "starter": "#include <string>\n#include <stdexcept>\nstd::string joinLabels(std::string a, std::string b)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "#include <string>\nstd::string joinLabels(std::string a, std::string b) {\n    if (a.empty())\n        return b;\n    if (b.empty())\n        return a;\n    return a + \" \" + b;\n}\n",
+    "tests": "assert(joinLabels(\"red\",\"kite\")==\"red kite\"); assert(joinLabels(\"\",\"kite\")==\"kite\"); assert(joinLabels(\"red\",\"\")==\"red\"); assert(joinLabels(\"\",\"\")==\"\");",
+    "beginnerOnly": false
+  },
+  {
+    "id": "first-character",
+    "title": "Safely read the first character",
+    "chapter": 5,
+    "url": "https://www.learncpp.com/cpp-tutorial/introduction-to-stdstring/",
+    "minutes": 15,
+    "topic": "Strings and views",
+    "prompt": "Implement firstOr(std::string text, char fallback), returning the first character or fallback when empty.",
+    "hints": [
+      "Check empty() before indexing."
+    ],
+    "explanation": "A string has no first character when its size is zero. Validate the index before accessing an element.",
+    "starter": "#include <string>\n#include <stdexcept>\nchar firstOr(std::string text, char fallback)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "#include <string>\nchar firstOr(std::string text, char fallback) {\n    return text.empty() ? fallback : text[0];\n}\n",
+    "tests": "assert(firstOr(\"apple\",'?')=='a'); assert(firstOr(\"\",'?')=='?'); assert(firstOr(\"z\",'x')=='z');",
+    "beginnerOnly": false
+  },
+  {
+    "id": "string-count",
+    "title": "Count a character",
+    "chapter": 5,
+    "url": "https://www.learncpp.com/cpp-tutorial/introduction-to-stdstring/",
+    "minutes": 15,
+    "topic": "Strings and views",
+    "prompt": "Implement countChar(std::string text, char target). Count every matching character. Inputs contain at most 1000 characters.",
+    "hints": [
+      "Use a range-based for loop over the characters."
+    ],
+    "explanation": "A range-based loop visits each element without manual indexing. Initialize the count before the loop so empty input produces zero.",
+    "starter": "#include <string>\n#include <stdexcept>\nint countChar(std::string text, char target)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "#include <string>\nint countChar(std::string text, char target) {\n    int count{};\n    for (char c : text)\n        if (c == target)\n            ++count;\n    return count;\n}\n",
+    "tests": "assert(countChar(\"banana\",'a')==3); assert(countChar(\"\",'a')==0); assert(countChar(\"aa\",'b')==0);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "prefix-check",
+    "title": "Check a prefix",
+    "chapter": 5,
+    "url": "https://www.learncpp.com/cpp-tutorial/introduction-to-stdstring/",
+    "minutes": 15,
+    "topic": "Strings and views",
+    "prompt": "Implement startsWith(std::string text, std::string prefix) using C++20 starts_with(). Empty prefix always matches.",
+    "hints": [
+      "std::string::starts_with accepts another string."
+    ],
+    "explanation": "A prefix comparison begins at position zero and does not change the string. An empty prefix matches because it requires no characters.",
+    "starter": "#include <string>\n#include <stdexcept>\nbool startsWith(std::string text, std::string prefix)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "#include <string>\nbool startsWith(std::string text, std::string prefix) {\n    return text.starts_with(prefix);\n}\n",
+    "tests": "assert(startsWith(\"oak\",\"oa\")); assert(startsWith(\"oak\",\"\")); assert(!startsWith(\"oak\",\"oaks\")); assert(!startsWith(\"oak\",\"ak\"));",
+    "beginnerOnly": false
+  },
+  {
+    "id": "suffix-check",
+    "title": "Check a suffix",
+    "chapter": 5,
+    "url": "https://www.learncpp.com/cpp-tutorial/introduction-to-stdstring/",
+    "minutes": 15,
+    "topic": "Strings and views",
+    "prompt": "Implement endsWith(std::string text, std::string suffix) using C++20 ends_with(). Empty suffix always matches.",
+    "hints": [
+      "Use the corresponding suffix member function."
+    ],
+    "explanation": "Suffix checks compare the final characters without allocating a substring. The suffix must fit within the original string.",
+    "starter": "#include <string>\n#include <stdexcept>\nbool endsWith(std::string text, std::string suffix)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "#include <string>\nbool endsWith(std::string text, std::string suffix) {\n    return text.ends_with(suffix);\n}\n",
+    "tests": "assert(endsWith(\"note.txt\",\".txt\")); assert(!endsWith(\"txt.note\",\".txt\")); assert(endsWith(\"\",\"\")); assert(!endsWith(\"a\",\"ba\"));",
+    "beginnerOnly": false
+  },
+  {
+    "id": "replace-character",
+    "title": "Replace characters in a copy",
+    "chapter": 5,
+    "url": "https://www.learncpp.com/cpp-tutorial/introduction-to-stdstring/",
+    "minutes": 15,
+    "topic": "Strings and views",
+    "prompt": "Implement replaced(std::string text, char from, char to). Return a copy with every occurrence replaced. Do not modify the caller’s string.",
+    "hints": [
+      "Iterate with char& to modify each character of the local copy."
+    ],
+    "explanation": "The string parameter is passed by value, so its characters belong to a separate string. References in the loop modify that local string.",
+    "starter": "#include <string>\n#include <stdexcept>\nstd::string replaced(std::string text, char from, char to)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "#include <string>\nstd::string replaced(std::string text, char from, char to) {\n    for (char &c : text)\n        if (c == from)\n            c = to;\n    return text;\n}\n",
+    "tests": "std::string s{\"a-b-c\"}; assert(replaced(s,'-',' ')==\"a b c\"); assert(s==\"a-b-c\"); assert(replaced(\"\",'a','b').empty());",
+    "beginnerOnly": false
+  },
+  {
+    "id": "view-prefix",
+    "title": "Take a non-owning prefix",
+    "chapter": 5,
+    "url": "https://www.learncpp.com/cpp-tutorial/introduction-to-stdstring_view/",
+    "minutes": 15,
+    "topic": "Strings and views",
+    "prompt": "Implement head(std::string_view text, std::size_t n), returning a view of its first n characters, or all of it when n is larger. The caller keeps the source alive.",
+    "hints": [
+      "substr(0, n) truncates a count that exceeds the remaining length."
+    ],
+    "explanation": "string_view refers to existing characters and does not own them. Returning a view is safe only while the referenced storage remains alive.",
+    "starter": "#include <string>\n#include <string_view>\n#include <stdexcept>\nstd::string_view head(std::string_view text, std::size_t n)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "#include <string>\n#include <string_view>\nstd::string_view head(std::string_view text, std::size_t n) {\n    return text.substr(0, n);\n}\n",
+    "tests": "std::string s{\"orchard\"}; auto v=head(s,3); assert(v==\"orc\"); assert(v.data()==s.data()); assert(head(s,99)==s); assert(head(s,0).empty());",
+    "beginnerOnly": false
+  },
+  {
+    "id": "owning-copy",
+    "title": "Turn a view into owned text",
+    "chapter": 5,
+    "url": "https://www.learncpp.com/cpp-tutorial/introduction-to-stdstring_view/",
+    "minutes": 15,
+    "topic": "Strings and views",
+    "prompt": "Implement owned(std::string_view text), returning an independent std::string. It must remain unchanged if the source is later modified.",
+    "hints": [
+      "Construct a std::string explicitly from the view."
+    ],
+    "explanation": "Converting a view to a string copies the characters. The resulting string owns its storage and no longer depends on the source’s lifetime.",
+    "starter": "#include <string>\n#include <string_view>\n#include <stdexcept>\nstd::string owned(std::string_view text)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "#include <string>\n#include <string_view>\nstd::string owned(std::string_view text) {\n    return std::string{text};\n}\n",
+    "tests": "std::string source{\"maple\"}; auto copy=owned(source); source[0]='M'; assert(copy==\"maple\"); assert(owned(\"\").empty());",
+    "beginnerOnly": false
+  },
+  {
+    "id": "integer-power",
+    "title": "Multiply a small integer power",
+    "chapter": 8,
+    "url": "https://www.learncpp.com/cpp-tutorial/for-statements/",
+    "minutes": 15,
+    "topic": "Loops and problem solving",
+    "prompt": "Implement power(int base, int exponent) for base -5..5 and exponent 0..8. Return 1 for exponent zero, including 0^0 for this task.",
+    "hints": [
+      "Start with the multiplicative identity, 1."
+    ],
+    "explanation": "An accumulator’s initial value determines the empty-loop result. Multiplication uses 1 as its identity, while addition uses 0.",
+    "starter": "#include <stdexcept>\nint power(int base, int exponent)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "int power(int base, int exponent) {\n    int result{1};\n    for (int i{}; i < exponent; ++i)\n        result *= base;\n    return result;\n}\n",
+    "tests": "assert(power(2,5)==32); assert(power(-2,3)==-8); assert(power(0,0)==1); assert(power(5,0)==1);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "factorial-loop",
+    "title": "Compute a bounded factorial",
+    "chapter": 8,
+    "url": "https://www.learncpp.com/cpp-tutorial/for-statements/",
+    "minutes": 15,
+    "topic": "Loops and problem solving",
+    "prompt": "Implement factorial(int n) for n in 0..12. Return n!, with 0! equal to 1.",
+    "hints": [
+      "Multiply the integers from 2 through n."
+    ],
+    "explanation": "The input bound keeps the result within a 32-bit signed int. Numeric algorithms need explicit bounds when using fixed-width types.",
+    "starter": "#include <stdexcept>\nint factorial(int n)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "int factorial(int n) {\n    int result{1};\n    for (int i{2}; i <= n; ++i)\n        result *= i;\n    return result;\n}\n",
+    "tests": "assert(factorial(0)==1); assert(factorial(1)==1); assert(factorial(5)==120); assert(factorial(12)==479001600);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "digit-sum",
+    "title": "Sum decimal digits",
+    "chapter": 8,
+    "url": "https://www.learncpp.com/cpp-tutorial/introduction-to-loops-and-while-statements/",
+    "minutes": 15,
+    "topic": "Loops and problem solving",
+    "prompt": "Implement digitSum(unsigned n). Repeatedly extract decimal digits and return their sum. Zero should produce zero.",
+    "hints": [
+      "Use % 10 to read a digit and / 10 to remove it."
+    ],
+    "explanation": "Integer division reduces the remaining number each iteration. This gives the loop a termination argument: a positive value eventually reaches zero.",
+    "starter": "#include <stdexcept>\nunsigned digitSum(unsigned n)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "unsigned digitSum(unsigned n) {\n    unsigned total{};\n    while (n != 0) {\n        total += n % 10;\n        n /= 10;\n    }\n    return total;\n}\n",
+    "tests": "assert(digitSum(0)==0); assert(digitSum(5029)==16); assert(digitSum(9)==9); assert(digitSum(10000)==1);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "digit-count",
+    "title": "Count digits including zero",
+    "chapter": 8,
+    "url": "https://www.learncpp.com/cpp-tutorial/do-while-statements/",
+    "minutes": 15,
+    "topic": "Loops and problem solving",
+    "prompt": "Implement digitCount(unsigned n). Zero has one decimal digit. Use a do-while loop.",
+    "hints": [
+      "Count once before testing the remaining value."
+    ],
+    "explanation": "A do-while loop executes at least once. That fits a representation where even zero occupies one digit.",
+    "starter": "#include <stdexcept>\nint digitCount(unsigned n)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "int digitCount(unsigned n) {\n    int count{};\n    do {\n        ++count;\n        n /= 10;\n    } while (n != 0);\n    return count;\n}\n",
+    "tests": "assert(digitCount(0)==1); assert(digitCount(9)==1); assert(digitCount(10)==2); assert(digitCount(1000)==4);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "greatest-divisor",
+    "title": "Use Euclid’s algorithm",
+    "chapter": 8,
+    "url": "https://www.learncpp.com/cpp-tutorial/introduction-to-loops-and-while-statements/",
+    "minutes": 15,
+    "topic": "Loops and problem solving",
+    "prompt": "Implement gcd(unsigned a, unsigned b). Return their greatest common divisor; define gcd(0,0) as zero.",
+    "hints": [
+      "Replace (a,b) with (b,a%b) until b becomes zero."
+    ],
+    "explanation": "Remainders preserve the common divisors while reducing the problem. Save the remainder before overwriting either operand.",
+    "starter": "#include <stdexcept>\nunsigned gcd(unsigned a, unsigned b)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "unsigned gcd(unsigned a, unsigned b) {\n    while (b != 0) {\n        unsigned r{a % b};\n        a = b;\n        b = r;\n    }\n    return a;\n}\n",
+    "tests": "assert(gcd(24,18)==6); assert(gcd(0,9)==9); assert(gcd(9,0)==9); assert(gcd(0,0)==0); assert(gcd(17,13)==1);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "prime-check",
+    "title": "Stop at the square root",
+    "chapter": 8,
+    "url": "https://www.learncpp.com/cpp-tutorial/break-and-continue/",
+    "minutes": 15,
+    "topic": "Loops and problem solving",
+    "prompt": "Implement isPrime(int n) for 0..1000000. Return false below 2. Stop testing divisors once d > n/d.",
+    "hints": [
+      "If a factor exceeds the square root, its paired factor is smaller."
+    ],
+    "explanation": "A failed divisibility test can return immediately. Comparing d <= n/d avoids a potentially overflowing d*d expression.",
+    "starter": "#include <stdexcept>\nbool isPrime(int n)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "bool isPrime(int n) {\n    if (n < 2)\n        return false;\n    for (int d{2}; d <= n / d; ++d)\n        if (n % d == 0)\n            return false;\n    return true;\n}\n",
+    "tests": "assert(!isPrime(0)); assert(!isPrime(1)); assert(isPrime(2)); assert(!isPrime(49)); assert(isPrime(97)); assert(!isPrime(1000000));",
+    "beginnerOnly": false
+  },
+  {
+    "id": "reverse-digits",
+    "title": "Reverse decimal digits",
+    "chapter": 8,
+    "url": "https://www.learncpp.com/cpp-tutorial/introduction-to-loops-and-while-statements/",
+    "minutes": 15,
+    "topic": "Loops and problem solving",
+    "prompt": "Implement reversedDigits(unsigned n) for n <= 1000000. Leading zeros in the reversed result disappear.",
+    "hints": [
+      "Shift the accumulated result by one decimal place before appending a digit."
+    ],
+    "explanation": "Multiplying by ten and adding the next digit constructs a decimal number. A numeric result cannot preserve leading zeros.",
+    "starter": "#include <stdexcept>\nunsigned reversedDigits(unsigned n)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "unsigned reversedDigits(unsigned n) {\n    unsigned result{};\n    while (n != 0) {\n        result = result * 10 + n % 10;\n        n /= 10;\n    }\n    return result;\n}\n",
+    "tests": "assert(reversedDigits(0)==0); assert(reversedDigits(120)==21); assert(reversedDigits(507)==705); assert(reversedDigits(1)==1);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "fibonacci-pair",
+    "title": "Keep only the previous two values",
+    "chapter": 8,
+    "url": "https://www.learncpp.com/cpp-tutorial/for-statements/",
+    "minutes": 15,
+    "topic": "Loops and problem solving",
+    "prompt": "Implement fibonacci(int n) for 0..30, with F0=0 and F1=1. Use a loop and constant extra storage.",
+    "hints": [
+      "Track consecutive values and save their sum before shifting them."
+    ],
+    "explanation": "When a recurrence depends only on two previous values, the full sequence need not be stored. Update order matters because assignments replace old values.",
+    "starter": "#include <stdexcept>\nint fibonacci(int n)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "int fibonacci(int n) {\n    int a{}, b{1};\n    for (int i{}; i < n; ++i) {\n        int next{a + b};\n        a = b;\n        b = next;\n    }\n    return a;\n}\n",
+    "tests": "assert(fibonacci(0)==0); assert(fibonacci(1)==1); assert(fibonacci(10)==55); assert(fibonacci(30)==832040);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "count-multiples",
+    "title": "Skip unwanted values",
+    "chapter": 8,
+    "url": "https://www.learncpp.com/cpp-tutorial/break-and-continue/",
+    "minutes": 15,
+    "topic": "Loops and problem solving",
+    "prompt": "Implement sumWithoutMultiples(int n, int divisor), summing 1..n except multiples of divisor. n is 0..100 and divisor is positive. Practise continue.",
+    "hints": [
+      "Use continue when i % divisor is zero."
+    ],
+    "explanation": "continue skips the rest of the current iteration. In a for loop, the iteration expression still runs before the condition is checked again.",
+    "starter": "#include <stdexcept>\nint sumWithoutMultiples(int n, int divisor)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "int sumWithoutMultiples(int n, int divisor) {\n    int sum{};\n    for (int i{1}; i <= n; ++i) {\n        if (i % divisor == 0)\n            continue;\n        sum += i;\n    }\n    return sum;\n}\n",
+    "tests": "assert(sumWithoutMultiples(5,2)==9); assert(sumWithoutMultiples(0,3)==0); assert(sumWithoutMultiples(5,1)==0); assert(sumWithoutMultiples(3,10)==6);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "binary-ones",
+    "title": "Count set bits",
+    "chapter": 6,
+    "url": "https://www.learncpp.com/cpp-tutorial/bitwise-operators/",
+    "minutes": 15,
+    "topic": "Loops and problem solving",
+    "prompt": "Implement bitCount(unsigned n) using shifts and a loop. Return the number of one bits.",
+    "hints": [
+      "Inspect the low bit with & 1u, then shift right."
+    ],
+    "explanation": "Unsigned right shifts insert zeros. Repeated shifts therefore terminate even when the highest bit was originally set.",
+    "starter": "#include <stdexcept>\nint bitCount(unsigned n)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "int bitCount(unsigned n) {\n    int count{};\n    while (n != 0) {\n        count += static_cast<int>(n & 1u);\n        n >>= 1;\n    }\n    return count;\n}\n",
+    "tests": "assert(bitCount(0)==0); assert(bitCount(1)==1); assert(bitCount(0b101101)==4); assert(bitCount(0xffu)==8);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "forward-call",
+    "title": "Declare before calling",
+    "chapter": 2,
+    "url": "https://www.learncpp.com/cpp-tutorial/forward-declarations/",
+    "minutes": 15,
+    "topic": "Functions and templates",
+    "prompt": "Define int twice(int) and int fourTimes(int). Place fourTimes before twice in the file and use a forward declaration so fourTimes can call twice twice. Inputs are -100..100.",
+    "hints": [
+      "A declaration states the signature without providing the body."
+    ],
+    "explanation": "A function name must be declared before it is used. A forward declaration lets definitions be arranged independently of the call order.",
+    "starter": "int twice(int value);\nint fourTimes(int value) { return 0; }\n// TODO: define twice below.\n",
+    "solution": "int twice(int value);\nint fourTimes(int value) {\n    return twice(twice(value));\n}\nint twice(int value) {\n    return value * 2;\n}\n",
+    "tests": "assert(fourTimes(3)==12); assert(fourTimes(-2)==-8); assert(twice(7)==14);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "overloaded-volume",
+    "title": "Overload by parameter count",
+    "chapter": 11,
+    "url": "https://www.learncpp.com/cpp-tutorial/function-overload-differentiation/",
+    "minutes": 15,
+    "topic": "Functions and templates",
+    "prompt": "Define volume(int side) for a cube, and volume(int w,int h,int d) for a box. Dimensions are 0..100.",
+    "hints": [
+      "Overloads can differ in the number of parameters."
+    ],
+    "explanation": "The number of arguments helps determine which overload is viable. Both functions can return the same type and still provide distinct interfaces.",
+    "starter": "// TODO: define the one-argument and three-argument volume overloads.\n",
+    "solution": "int volume(int side) {\n    return side * side * side;\n}\nint volume(int w, int h, int d) {\n    return w * h * d;\n}\n",
+    "tests": "assert(volume(3)==27); assert(volume(2,3,4)==24); assert(volume(0)==0);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "default-step",
+    "title": "Give a trailing parameter a default",
+    "chapter": 11,
+    "url": "https://www.learncpp.com/cpp-tutorial/default-arguments/",
+    "minutes": 15,
+    "topic": "Functions and templates",
+    "prompt": "Implement advance(int position,int step=1). Return position + step. Both inputs are within -1000..1000.",
+    "hints": [
+      "Put the default in the function declaration or definition, not both."
+    ],
+    "explanation": "Default arguments let callers omit trailing arguments. They do not create additional function overloads.",
+    "starter": "#include <stdexcept>\nint advance(int position, int step = 1)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "int advance(int position, int step = 1) {\n    return position + step;\n}\n",
+    "tests": "assert(advance(4)==5); assert(advance(4,3)==7); assert(advance(4,-2)==2); assert(advance(0,0)==0);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "generic-square",
+    "title": "Square two numeric types",
+    "chapter": 11,
+    "url": "https://www.learncpp.com/cpp-tutorial/function-templates/",
+    "minutes": 15,
+    "topic": "Functions and templates",
+    "prompt": "Define template<typename T> T square(T value), supporting int and double. Test that the return type matches the argument type. Values are small enough to avoid overflow.",
+    "hints": [
+      "Use the template type for both the parameter and result."
+    ],
+    "explanation": "A function template describes a family of functions. The compiler instantiates a version for each required type.",
+    "starter": "#include <stdexcept>\ntemplate<typename T> T square(T value)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "template <typename T> T square(T value) {\n    return value * value;\n}\n",
+    "tests": "static_assert(std::is_same_v<decltype(square(3)),int>); static_assert(std::is_same_v<decltype(square(1.5)),double>); assert(square(-4)==16); assert(square(1.5)==2.25);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "generic-maximum",
+    "title": "Choose a maximum generically",
+    "chapter": 11,
+    "url": "https://www.learncpp.com/cpp-tutorial/function-templates/",
+    "minutes": 15,
+    "topic": "Functions and templates",
+    "prompt": "Define template<typename T> T maximum(T a,T b) for comparable values of the same type. Return a on a tie.",
+    "hints": [
+      "Only operator< is required to compare the two values."
+    ],
+    "explanation": "Using one template parameter requires a consistent deduced argument type. The function can support strings as well as arithmetic values if comparison is defined.",
+    "starter": "#include <string>\n#include <stdexcept>\ntemplate<typename T> T maximum(T a, T b)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "#include <string>\ntemplate <typename T> T maximum(T a, T b) {\n    return a < b ? b : a;\n}\n",
+    "tests": "assert(maximum(-3,-8)==-3); assert(maximum(2.5,1.5)==2.5); assert(maximum(std::string{\"fir\"},std::string{\"oak\"})==\"oak\"); assert(maximum(4,4)==4);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "mixed-sum",
+    "title": "Deduce a result from an expression",
+    "chapter": 11,
+    "url": "https://www.learncpp.com/cpp-tutorial/function-templates-with-multiple-template-types/",
+    "minutes": 15,
+    "topic": "Functions and templates",
+    "prompt": "Define template<typename A,typename B> auto sum(A a,B b), returning a+b. Support int and double combinations. Values are within -100..100.",
+    "hints": [
+      "Use different template parameters so each argument can have its own type."
+    ],
+    "explanation": "The return expression determines an auto return type. Arithmetic conversion rules decide the type of a+b.",
+    "starter": "#include <stdexcept>\ntemplate<typename A, typename B> auto sum(A a, B b)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "template <typename A, typename B> auto sum(A a, B b) {\n    return a + b;\n}\n",
+    "tests": "static_assert(std::is_same_v<decltype(sum(2,0.5)),double>); static_assert(std::is_same_v<decltype(sum(2,3)),int>); assert(sum(2,0.5)==2.5); assert(sum(-3,1)==-2);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "compile-time-factor",
+    "title": "Use a non-type template parameter",
+    "chapter": 11,
+    "url": "https://www.learncpp.com/cpp-tutorial/non-type-template-parameters/",
+    "minutes": 15,
+    "topic": "Functions and templates",
+    "prompt": "Define template<int Factor> int scaled(int value), multiplying by Factor. Factor and value are within -100..100.",
+    "hints": [
+      "Factor is available as a compile-time value inside the function."
+    ],
+    "explanation": "A non-type template parameter supplies a value as part of an instantiation. Different factors select different template instantiations.",
+    "starter": "#include <stdexcept>\ntemplate<int Factor> int scaled(int value)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "template <int Factor> int scaled(int value) {\n    return value * Factor;\n}\n",
+    "tests": "assert(scaled<3>(4)==12); assert(scaled<-2>(5)==-10); assert(scaled<0>(99)==0);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "constexpr-triangle",
+    "title": "Evaluate a function at compile time",
+    "chapter": 11,
+    "url": "https://www.learncpp.com/cpp-tutorial/constexpr-functions/",
+    "minutes": 15,
+    "topic": "Functions and templates",
+    "prompt": "Implement constexpr int triangle(int n) summing 1..n for n in 0..100. Make it usable in static_assert.",
+    "hints": [
+      "A constexpr function can contain a loop in C++20."
+    ],
+    "explanation": "constexpr permits a function call to be evaluated as a constant expression when the arguments and execution satisfy the requirements. The function can still be called at runtime.",
+    "starter": "#include <stdexcept>\nconstexpr int triangle(int n)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "constexpr int triangle(int n) {\n    int total{};\n    for (int i{1}; i <= n; ++i)\n        total += i;\n    return total;\n}\n",
+    "tests": "static_assert(triangle(0)==0); static_assert(triangle(5)==15); int n=10; assert(triangle(n)==55);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "local-counter",
+    "title": "Retain a local value between calls",
+    "chapter": 7,
+    "url": "https://www.learncpp.com/cpp-tutorial/static-local-variables/",
+    "minutes": 15,
+    "topic": "Functions and templates",
+    "prompt": "Implement nextId() returning 1,2,3,... on successive calls in one program. Use a static local int initialized to zero.",
+    "hints": [
+      "A static local variable survives function returns."
+    ],
+    "explanation": "A static local has block scope but static storage duration. Initialization happens once, so subsequent calls reuse the stored value.",
+    "starter": "#include <stdexcept>\nint nextId()\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "int nextId() {\n    static int counter{};\n    return ++counter;\n}\n",
+    "tests": "assert(nextId()==1); assert(nextId()==2); assert(nextId()==3);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "type-alias",
+    "title": "Name a distance type",
+    "chapter": 10,
+    "url": "https://www.learncpp.com/cpp-tutorial/typedefs-and-type-aliases/",
+    "minutes": 15,
+    "topic": "Functions and templates",
+    "prompt": "Define using Distance = long long, then implement Distance combined(Distance a,Distance b). Inputs are 0..10 billion.",
+    "hints": [
+      "A type alias gives an existing type another name."
+    ],
+    "explanation": "Aliases improve the meaning of declarations but do not create distinct types. Distance and long long remain the same type.",
+    "starter": "// TODO: declare Distance, then define combined.\n",
+    "solution": "using Distance = long long;\nDistance combined(Distance a, Distance b) {\n    return a + b;\n}\n",
+    "tests": "static_assert(std::is_same_v<Distance,long long>); assert(combined(3000000000LL,4000000000LL)==7000000000LL); assert(combined(0,0)==0);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "reference-increment",
+    "title": "Change the caller’s value",
+    "chapter": 12,
+    "url": "https://www.learncpp.com/cpp-tutorial/pass-by-lvalue-reference/",
+    "minutes": 15,
+    "topic": "References and pointers",
+    "prompt": "Implement void increment(int& value), increasing the caller’s value by one. Input is within -1000..1000.",
+    "hints": [
+      "A reference parameter is an alias for the argument."
+    ],
+    "explanation": "Assignments through a non-const lvalue reference affect the referenced object. No second int is created for the parameter.",
+    "starter": "#include <stdexcept>\nvoid increment(int& value)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "void increment(int &value) {\n    ++value;\n}\n",
+    "tests": "int n{7}; increment(n); assert(n==8); increment(n); assert(n==9);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "reference-swap",
+    "title": "Swap two objects",
+    "chapter": 12,
+    "url": "https://www.learncpp.com/cpp-tutorial/pass-by-lvalue-reference/",
+    "minutes": 15,
+    "topic": "References and pointers",
+    "prompt": "Implement void swapValues(int& a,int& b) using a temporary. It must also work if both references name the same object.",
+    "hints": [
+      "Save a before assigning b into it."
+    ],
+    "explanation": "References can alias the same object. A temporary preserves the original value and makes a self-swap harmless.",
+    "starter": "#include <stdexcept>\nvoid swapValues(int& a, int& b)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "void swapValues(int &a, int &b) {\n    int saved{a};\n    a = b;\n    b = saved;\n}\n",
+    "tests": "int a=2,b=9; swapValues(a,b); assert(a==9 && b==2); swapValues(a,a); assert(a==9);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "const-reference",
+    "title": "Read a string without copying",
+    "chapter": 12,
+    "url": "https://www.learncpp.com/cpp-tutorial/pass-by-const-lvalue-reference/",
+    "minutes": 15,
+    "topic": "References and pointers",
+    "prompt": "Implement std::size_t lengthOf(const std::string& text). Return its length without modifying it or copying the whole string.",
+    "hints": [
+      "A const reference permits reading but not modification through that reference."
+    ],
+    "explanation": "Binding a const reference avoids a by-value copy. The const qualifier documents that this function will not modify the argument through the parameter.",
+    "starter": "#include <string>\n#include <stdexcept>\nstd::size_t lengthOf(const std::string& text)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "#include <string>\nstd::size_t lengthOf(const std::string &text) {\n    return text.size();\n}\n",
+    "tests": "const std::string s{\"birch\"}; assert(lengthOf(s)==5); assert(lengthOf(\"\")==0); static_assert(std::is_same_v<decltype(&lengthOf),std::size_t(*)(const std::string&)>);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "nullable-read",
+    "title": "Read an optional address",
+    "chapter": 12,
+    "url": "https://www.learncpp.com/cpp-tutorial/null-pointers/",
+    "minutes": 15,
+    "topic": "References and pointers",
+    "prompt": "Implement readOr(const int* value,int fallback). Return *value for a non-null pointer, otherwise fallback.",
+    "hints": [
+      "Test the pointer before dereferencing it."
+    ],
+    "explanation": "nullptr represents the absence of an address. Dereferencing it is invalid, so nullable pointer APIs need an explicit absent case.",
+    "starter": "#include <stdexcept>\nint readOr(const int* value, int fallback)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "int readOr(const int *value, int fallback) {\n    return value ? *value : fallback;\n}\n",
+    "tests": "int n=12; assert(readOr(&n,-1)==12); assert(readOr(nullptr,-1)==-1); n=0; assert(readOr(&n,9)==0);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "pointer-write",
+    "title": "Update through a pointer",
+    "chapter": 12,
+    "url": "https://www.learncpp.com/cpp-tutorial/pass-by-address/",
+    "minutes": 15,
+    "topic": "References and pointers",
+    "prompt": "Implement setIfPresent(int* target,int value), assigning through target when non-null. Null is a no-op.",
+    "hints": [
+      "Use *target on the left of assignment after a null check."
+    ],
+    "explanation": "The pointer parameter itself is copied, but both copies can point to the same int. Dereferencing changes that shared object.",
+    "starter": "#include <stdexcept>\nvoid setIfPresent(int* target, int value)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "void setIfPresent(int *target, int value) {\n    if (target)\n        *target = value;\n}\n",
+    "tests": "int n=3; setIfPresent(&n,8); assert(n==8); setIfPresent(nullptr,99); assert(n==8);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "return-reference",
+    "title": "Return an alias to the larger object",
+    "chapter": 12,
+    "url": "https://www.learncpp.com/cpp-tutorial/return-by-reference-and-return-by-address/",
+    "minutes": 15,
+    "topic": "References and pointers",
+    "prompt": "Implement int& largerRef(int& a,int& b), returning a reference to the larger value, or a on a tie. Never return a local temporary.",
+    "hints": [
+      "Return one of the reference parameters directly."
+    ],
+    "explanation": "A returned reference must refer to an object that outlives the call. References to caller-owned arguments meet that requirement while local variables do not.",
+    "starter": "#include <stdexcept>\nint& largerRef(int& a, int& b)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "int &largerRef(int &a, int &b) {\n    return a >= b ? a : b;\n}\n",
+    "tests": "int a=2,b=7; largerRef(a,b)=10; assert(b==10 && a==2); a=10; assert(&largerRef(a,b)==&a);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "output-parameter",
+    "title": "Report a division result",
+    "chapter": 12,
+    "url": "https://www.learncpp.com/cpp-tutorial/in-and-out-parameters/",
+    "minutes": 15,
+    "topic": "References and pointers",
+    "prompt": "Implement bool divide(int numerator,int denominator,int& result). Return false on a zero denominator and leave result unchanged; otherwise store the integer quotient and return true. Inputs are -1000..1000.",
+    "hints": [
+      "Validate first, then assign the output."
+    ],
+    "explanation": "An output reference lets the function return a value separately from its success flag. On failure, preserving the output avoids an unexpected partial update.",
+    "starter": "#include <stdexcept>\nbool divide(int numerator, int denominator, int& result)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "bool divide(int numerator, int denominator, int &result) {\n    if (denominator == 0)\n        return false;\n    result = numerator / denominator;\n    return true;\n}\n",
+    "tests": "int out=99; assert(!divide(4,0,out)); assert(out==99); assert(divide(9,2,out)); assert(out==4); assert(divide(-9,2,out)); assert(out==-4);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "optional-division",
+    "title": "Represent a missing result",
+    "chapter": 12,
+    "url": "https://www.learncpp.com/cpp-tutorial/stdoptional/",
+    "minutes": 15,
+    "topic": "References and pointers",
+    "prompt": "Implement std::optional<int> quotient(int a,int b), returning nullopt when b is zero. Inputs are -1000..1000.",
+    "hints": [
+      "Return a normal int on success; optional can hold it."
+    ],
+    "explanation": "optional represents either a value or no value. Unlike a sentinel integer, the empty state cannot be confused with a valid numerical result.",
+    "starter": "#include <optional>\n#include <stdexcept>\nstd::optional<int> quotient(int a, int b)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "#include <optional>\nstd::optional<int> quotient(int a, int b) {\n    if (b == 0)\n        return std::nullopt;\n    return a / b;\n}\n",
+    "tests": "assert(!quotient(3,0)); assert(quotient(0,3).has_value()); assert(*quotient(0,3)==0); assert(*quotient(9,2)==4);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "optional-default",
+    "title": "Choose an optional fallback",
+    "chapter": 12,
+    "url": "https://www.learncpp.com/cpp-tutorial/stdoptional/",
+    "minutes": 15,
+    "topic": "References and pointers",
+    "prompt": "Implement int resolved(std::optional<int> value,int fallback) using value_or. A stored zero must not trigger the fallback.",
+    "hints": [
+      "Test presence, not the truthiness of the contained integer."
+    ],
+    "explanation": "An optional containing zero is engaged. Presence and the stored value are separate pieces of information.",
+    "starter": "#include <optional>\n#include <stdexcept>\nint resolved(std::optional<int> value, int fallback)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "#include <optional>\nint resolved(std::optional<int> value, int fallback) {\n    return value.value_or(fallback);\n}\n",
+    "tests": "assert(resolved(std::nullopt,7)==7); assert(resolved(0,7)==0); assert(resolved(-4,7)==-4);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "reference-identity",
+    "title": "Detect whether references alias",
+    "chapter": 12,
+    "url": "https://www.learncpp.com/cpp-tutorial/lvalue-references/",
+    "minutes": 15,
+    "topic": "References and pointers",
+    "prompt": "Implement bool sameObject(const int& a,const int& b), comparing object identity rather than values.",
+    "hints": [
+      "Take each reference’s address with &."
+    ],
+    "explanation": "Two distinct objects can contain equal values. Comparing addresses distinguishes identity from equality of contents.",
+    "starter": "#include <stdexcept>\nbool sameObject(const int& a, const int& b)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "bool sameObject(const int &a, const int &b) {\n    return &a == &b;\n}\n",
+    "tests": "int a=5,b=5; assert(sameObject(a,a)); assert(!sameObject(a,b)); const int& alias=a; assert(sameObject(alias,a));",
+    "beginnerOnly": false
+  },
+  {
+    "id": "point-aggregate",
+    "title": "Return an aggregate",
+    "chapter": 13,
+    "url": "https://www.learncpp.com/cpp-tutorial/introduction-to-structs-members-and-member-selection/",
+    "minutes": 15,
+    "topic": "Structs and classes",
+    "prompt": "Define struct Point with int x and y, both defaulting to zero. Implement Point shifted(Point p,int dx,int dy), returning the translated point. Values are within -1000..1000.",
+    "hints": [
+      "Access fields with the dot operator."
+    ],
+    "explanation": "A struct groups related values. Passing it by value gives the function its own copy, so returning a modified copy leaves the input object unchanged.",
+    "starter": "struct Point { /* TODO: x and y */ };\n// TODO: shifted\n",
+    "solution": "struct Point {\n    int x{};\n    int y{};\n};\nPoint shifted(Point p, int dx, int dy) {\n    p.x += dx;\n    p.y += dy;\n    return p;\n}\n",
+    "tests": "Point origin{}; assert(origin.x==0 && origin.y==0); Point p{2,3}; auto q=shifted(p,-1,4); assert(q.x==1 && q.y==7); assert(p.x==2 && p.y==3);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "rectangle-members",
+    "title": "Give a value a member function",
+    "chapter": 14,
+    "url": "https://www.learncpp.com/cpp-tutorial/member-functions/",
+    "minutes": 15,
+    "topic": "Structs and classes",
+    "prompt": "Define struct Rectangle with int width and height defaulting to zero, and int area() const. Dimensions are 0..100.",
+    "hints": [
+      "The member function can read width and height directly."
+    ],
+    "explanation": "A member function operates on a particular object. Marking a read-only operation const allows calls on const objects.",
+    "starter": "struct Rectangle { int width{}; int height{}; int area() const; };\n",
+    "solution": "struct Rectangle {\n    int width{};\n    int height{};\n    int area() const {\n        return width * height;\n    }\n};\n",
+    "tests": "const Rectangle r{3,4}; assert(r.area()==12); assert(Rectangle{}.area()==0);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "enum-direction",
+    "title": "Name a finite set of states",
+    "chapter": 13,
+    "url": "https://www.learncpp.com/cpp-tutorial/scoped-enumerations-enum-classes/",
+    "minutes": 15,
+    "topic": "Structs and classes",
+    "prompt": "Define enum class Direction { north,east,south,west }; implement Direction opposite(Direction d).",
+    "hints": [
+      "Use a switch over scoped enumerator names."
+    ],
+    "explanation": "A scoped enum keeps enumerator names inside its type and does not implicitly convert to int. This helps prevent mixing unrelated categories.",
+    "starter": "enum class Direction { north,east,south,west };\nDirection opposite(Direction d);\n",
+    "solution": "enum class Direction { north, east, south, west };\nDirection opposite(Direction d) {\n    switch (d) {\n    case Direction::north:\n        return Direction::south;\n    case Direction::east:\n        return Direction::west;\n    case Direction::south:\n        return Direction::north;\n    case Direction::west:\n        return Direction::east;\n    }\n    return d;\n}\n",
+    "tests": "assert(opposite(Direction::north)==Direction::south); assert(opposite(Direction::west)==Direction::east); assert(opposite(opposite(Direction::east))==Direction::east);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "default-settings",
+    "title": "Provide member defaults",
+    "chapter": 13,
+    "url": "https://www.learncpp.com/cpp-tutorial/default-member-initialization/",
+    "minutes": 15,
+    "topic": "Structs and classes",
+    "prompt": "Define struct Settings with int attempts=3 and bool verbose=false. Implement Settings quietOnce(), returning attempts=1 and verbose=false.",
+    "hints": [
+      "Default member initializers apply to members omitted from aggregate initialization."
+    ],
+    "explanation": "Member defaults keep useful initial values near the declaration. Aggregate initialization can override selected leading members.",
+    "starter": "struct Settings { /* TODO: defaults */ };\nSettings quietOnce();\n",
+    "solution": "struct Settings {\n    int attempts{3};\n    bool verbose{false};\n};\nSettings quietOnce() {\n    return Settings{1};\n}\n",
+    "tests": "Settings s{}; assert(s.attempts==3 && !s.verbose); auto q=quietOnce(); assert(q.attempts==1 && !q.verbose);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "private-counter",
+    "title": "Protect a counter’s state",
+    "chapter": 14,
+    "url": "https://www.learncpp.com/cpp-tutorial/public-and-private-members-and-access-specifiers/",
+    "minutes": 15,
+    "topic": "Structs and classes",
+    "prompt": "Define class Counter with private int state starting at zero; public void increment() and int value() const.",
+    "hints": [
+      "Place the data member before public: or explicitly mark it private."
+    ],
+    "explanation": "Private data prevents callers from bypassing the class’s operations. Public member functions expose the behavior the type supports.",
+    "starter": "class Counter { int count{}; public: void increment(); int value() const; };\n",
+    "solution": "class Counter {\n    int count{};\n\n  public:\n    void increment() {\n        ++count;\n    }\n    int value() const {\n        return count;\n    }\n};\n",
+    "tests": "Counter c; assert(c.value()==0); c.increment(); c.increment(); assert(c.value()==2); const Counter copy=c; assert(copy.value()==2);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "constructor-values",
+    "title": "Initialize members in a constructor",
+    "chapter": 14,
+    "url": "https://www.learncpp.com/cpp-tutorial/constructor-member-initializer-lists/",
+    "minutes": 15,
+    "topic": "Structs and classes",
+    "prompt": "Define class Interval with private int low and high, constructor Interval(int,int), and int width() const returning high-low. Inputs satisfy -1000 <= low <= high <= 1000.",
+    "hints": [
+      "Use the constructor’s member initializer list."
+    ],
+    "explanation": "Member initializer lists initialize members before the constructor body runs. This differs from assigning new values after default initialization.",
+    "starter": "class Interval { int low; int high; public: Interval(int a,int b); int width() const; };\n",
+    "solution": "class Interval {\n    int low;\n    int high;\n\n  public:\n    Interval(int a, int b) : low{a}, high{b} {\n    }\n    int width() const {\n        return high - low;\n    }\n};\n",
+    "tests": "const Interval i{-2,5}; assert(i.width()==7); assert(Interval{3,3}.width()==0);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "explicit-wrapper",
+    "title": "Require an explicit unit conversion",
+    "chapter": 14,
+    "url": "https://www.learncpp.com/cpp-tutorial/converting-constructors-and-the-explicit-keyword/",
+    "minutes": 15,
+    "topic": "Structs and classes",
+    "prompt": "Define class Metres with an explicit constructor from double and double value() const. Store the supplied value unchanged.",
+    "hints": [
+      "Prefix the constructor with explicit."
+    ],
+    "explanation": "explicit prevents implicit conversion through a constructor. Callers must state when a raw number should become a value of the wrapper type.",
+    "starter": "class Metres { double amount; public: /* TODO: constructor */ double value() const; };\n",
+    "solution": "class Metres {\n    double amount;\n\n  public:\n    explicit Metres(double n) : amount{n} {\n    }\n    double value() const {\n        return amount;\n    }\n};\n",
+    "tests": "static_assert(!std::is_convertible_v<double,Metres>); const Metres m{2.5}; assert(m.value()==2.5);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "class-template-box",
+    "title": "Store a generic value",
+    "chapter": 13,
+    "url": "https://www.learncpp.com/cpp-tutorial/class-templates/",
+    "minutes": 15,
+    "topic": "Structs and classes",
+    "prompt": "Define template<typename T> struct Box containing T value{}, plus T get() const returning a copy.",
+    "hints": [
+      "The member type uses the class template parameter."
+    ],
+    "explanation": "A class template generates a distinct type for each template argument. Box<int> and Box<std::string> therefore store different types safely.",
+    "starter": "#include <string>\ntemplate<typename T> struct Box { /* TODO: value and get */ };\n",
+    "solution": "#include <string>\ntemplate <typename T> struct Box {\n    T value{};\n    T get() const {\n        return value;\n    }\n};\n",
+    "tests": "Box<int> a{7}; assert(a.get()==7); const Box<std::string> b{\"elm\"}; assert(b.get()==\"elm\"); assert(Box<int>{}.get()==0);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "independent-copy",
+    "title": "Preserve value semantics",
+    "chapter": 14,
+    "url": "https://www.learncpp.com/cpp-tutorial/introduction-to-the-copy-constructor/",
+    "minutes": 15,
+    "topic": "Structs and classes",
+    "prompt": "Define struct Label containing std::string text and void rename(std::string next). A copied Label must keep independent text when the original changes.",
+    "hints": [
+      "Let std::string’s normal copy behavior manage its storage."
+    ],
+    "explanation": "Members such as std::string already implement copying and destruction. The compiler-generated operations compose those behaviors without manual memory management.",
+    "starter": "#include <string>\nstruct Label { std::string text; void rename(std::string next); };\n",
+    "solution": "#include <string>\nstruct Label {\n    std::string text;\n    void rename(std::string next) {\n        text = next;\n    }\n};\n",
+    "tests": "Label a{\"cedar\"}; Label b=a; a.rename(\"pine\"); assert(a.text==\"pine\"); assert(b.text==\"cedar\");",
+    "beginnerOnly": false
+  },
+  {
+    "id": "clamped-class",
+    "title": "Maintain an invariant",
+    "chapter": 14,
+    "url": "https://www.learncpp.com/cpp-tutorial/the-benefits-of-data-hiding-encapsulation/",
+    "minutes": 15,
+    "topic": "Structs and classes",
+    "prompt": "Define class Percentage with a default value of 0, void set(int), and int value() const. Clamp every assigned value to 0..100 using private storage.",
+    "hints": [
+      "Keep validation in set so every public update follows the same rule."
+    ],
+    "explanation": "An invariant is a condition the type keeps true. Private storage and a validating setter prevent invalid states through the public interface.",
+    "starter": "class Percentage { int current{}; public: void set(int n); int value() const; };\n",
+    "solution": "class Percentage {\n    int current{};\n\n  public:\n    void set(int n) {\n        current = n < 0 ? 0 : (n > 100 ? 100 : n);\n    }\n    int value() const {\n        return current;\n    }\n};\n",
+    "tests": "Percentage p; assert(p.value()==0); p.set(40); assert(p.value()==40); p.set(-1); assert(p.value()==0); p.set(101); assert(p.value()==100);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "vector-total",
+    "title": "Sum a collection",
+    "chapter": 16,
+    "url": "https://www.learncpp.com/cpp-tutorial/introduction-to-stdvector-and-list-constructors/",
+    "minutes": 15,
+    "topic": "Vectors and arrays",
+    "prompt": "Implement int total(const std::vector<int>& values). Empty input produces zero. At most 100 values, each within -1000..1000.",
+    "hints": [
+      "Use a const-reference parameter and a range-based loop."
+    ],
+    "explanation": "A vector manages a sequence whose size can vary at runtime. Passing it by const reference avoids copying the sequence for a read-only operation.",
+    "starter": "#include <vector>\n#include <stdexcept>\nint total(const std::vector<int>& values)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "#include <vector>\nint total(const std::vector<int> &values) {\n    int sum{};\n    for (int n : values)\n        sum += n;\n    return sum;\n}\n",
+    "tests": "assert(total({})==0); assert(total({3,-2,7})==8); assert(total({-4,-5})==-9);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "positive-filter",
+    "title": "Build a filtered vector",
+    "chapter": 16,
+    "url": "https://www.learncpp.com/cpp-tutorial/returning-stdvector-and-an-introduction-to-move-semantics/",
+    "minutes": 15,
+    "topic": "Vectors and arrays",
+    "prompt": "Implement std::vector<int> positives(const std::vector<int>& values). Keep only values greater than zero, in original order.",
+    "hints": [
+      "Append matching values with push_back."
+    ],
+    "explanation": "Returning a vector by value is a natural ownership transfer. The caller receives an independent result containing just the selected elements.",
+    "starter": "#include <vector>\n#include <stdexcept>\nstd::vector<int> positives(const std::vector<int>& values)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "#include <vector>\nstd::vector<int> positives(const std::vector<int> &values) {\n    std::vector<int> result;\n    for (int n : values)\n        if (n > 0)\n            result.push_back(n);\n    return result;\n}\n",
+    "tests": "assert((positives({-1,2,0,3})==std::vector<int>{2,3})); assert(positives({}).empty()); assert(positives({-2,0}).empty());",
+    "beginnerOnly": false
+  },
+  {
+    "id": "vector-maximum",
+    "title": "Represent an empty collection result",
+    "chapter": 16,
+    "url": "https://www.learncpp.com/cpp-tutorial/passing-stdvector/",
+    "minutes": 15,
+    "topic": "Vectors and arrays",
+    "prompt": "Implement std::optional<int> largest(const std::vector<int>& values). Return nullopt when empty and the largest element otherwise.",
+    "hints": [
+      "Initialize from the first element rather than zero."
+    ],
+    "explanation": "Zero is not a valid initial maximum for a collection containing only negative values. The first element gives a valid starting candidate, and optional represents empty input.",
+    "starter": "#include <vector>\n#include <optional>\n#include <stdexcept>\nstd::optional<int> largest(const std::vector<int>& values)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "#include <optional>\n#include <vector>\nstd::optional<int> largest(const std::vector<int> &values) {\n    if (values.empty())\n        return std::nullopt;\n    int best{values[0]};\n    for (int n : values)\n        if (n > best)\n            best = n;\n    return best;\n}\n",
+    "tests": "assert(!largest({})); assert(*largest({-9,-3,-7})==-3); assert(*largest({4})==4); assert(*largest({1,8,2})==8);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "vector-in-place",
+    "title": "Double each element",
+    "chapter": 16,
+    "url": "https://www.learncpp.com/cpp-tutorial/range-based-for-loops-for-each/",
+    "minutes": 15,
+    "topic": "Vectors and arrays",
+    "prompt": "Implement void doubleAll(std::vector<int>& values), doubling every element in place. Elements are within -1000..1000.",
+    "hints": [
+      "Use int& as the loop variable."
+    ],
+    "explanation": "A by-value range variable is a copy. A reference range variable aliases each element so assignments update the vector.",
+    "starter": "#include <vector>\n#include <stdexcept>\nvoid doubleAll(std::vector<int>& values)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "#include <vector>\nvoid doubleAll(std::vector<int> &values) {\n    for (int &n : values)\n        n *= 2;\n}\n",
+    "tests": "std::vector<int> v{1,-2,0}; doubleAll(v); assert((v==std::vector<int>{2,-4,0})); std::vector<int> e; doubleAll(e); assert(e.empty());",
+    "beginnerOnly": false
+  },
+  {
+    "id": "vector-resize",
+    "title": "Extend with zeros",
+    "chapter": 16,
+    "url": "https://www.learncpp.com/cpp-tutorial/stdvector-resizing-and-capacity/",
+    "minutes": 15,
+    "topic": "Vectors and arrays",
+    "prompt": "Implement void extend(std::vector<int>& values,std::size_t minimum). Grow to minimum with zero-valued new elements, but never shrink. minimum is at most 1000.",
+    "hints": [
+      "Call resize only if size is below the minimum."
+    ],
+    "explanation": "resize changes the number of elements; reserve changes capacity without adding elements. Value-initialized int elements are zero.",
+    "starter": "#include <vector>\n#include <stdexcept>\nvoid extend(std::vector<int>& values, std::size_t minimum)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "#include <vector>\nvoid extend(std::vector<int> &values, std::size_t minimum) {\n    if (values.size() < minimum)\n        values.resize(minimum);\n}\n",
+    "tests": "std::vector<int> v{4,5}; extend(v,4); assert((v==std::vector<int>{4,5,0,0})); extend(v,1); assert(v.size()==4);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "stack-pop",
+    "title": "Pop only when nonempty",
+    "chapter": 16,
+    "url": "https://www.learncpp.com/cpp-tutorial/stdvector-and-stack-behavior/",
+    "minutes": 15,
+    "topic": "Vectors and arrays",
+    "prompt": "Implement std::optional<int> popLast(std::vector<int>& values). Remove and return the last value, or nullopt when empty.",
+    "hints": [
+      "Save back() before calling pop_back()."
+    ],
+    "explanation": "pop_back removes an element without returning it. Reading and removing are separate operations, and both require a nonempty vector.",
+    "starter": "#include <vector>\n#include <optional>\n#include <stdexcept>\nstd::optional<int> popLast(std::vector<int>& values)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "#include <optional>\n#include <vector>\nstd::optional<int> popLast(std::vector<int> &values) {\n    if (values.empty())\n        return std::nullopt;\n    int result{values.back()};\n    values.pop_back();\n    return result;\n}\n",
+    "tests": "std::vector<int> v{2,5}; assert(*popLast(v)==5); assert((v==std::vector<int>{2})); assert(*popLast(v)==2); assert(!popLast(v));",
+    "beginnerOnly": false
+  },
+  {
+    "id": "array-dot",
+    "title": "Multiply corresponding components",
+    "chapter": 17,
+    "url": "https://www.learncpp.com/cpp-tutorial/introduction-to-stdarray/",
+    "minutes": 15,
+    "topic": "Vectors and arrays",
+    "prompt": "Implement int dot(const std::array<int,3>& a,const std::array<int,3>& b), summing a[i]*b[i]. Components are within -100..100.",
+    "hints": [
+      "The arrays have exactly three elements."
+    ],
+    "explanation": "std::array stores its size in the type. A dot product combines corresponding elements and accumulates their products.",
+    "starter": "#include <array>\n#include <stdexcept>\nint dot(const std::array<int,3>& a, const std::array<int,3>& b)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "#include <array>\nint dot(const std::array<int, 3> &a,\n        const std::array<int, 3> &b) {\n    int result{};\n    for (std::size_t i{}; i < a.size(); ++i)\n        result += a[i] * b[i];\n    return result;\n}\n",
+    "tests": "assert(dot({1,2,3},{4,5,6})==32); assert(dot({0,0,0},{9,8,7})==0); assert(dot({-1,0,1},{2,3,4})==2);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "array-reversal",
+    "title": "Return a reversed fixed-size array",
+    "chapter": 17,
+    "url": "https://www.learncpp.com/cpp-tutorial/passing-and-returning-stdarray/",
+    "minutes": 15,
+    "topic": "Vectors and arrays",
+    "prompt": "Implement std::array<int,4> reversed(std::array<int,4> values). Return the elements in reverse order.",
+    "hints": [
+      "Swap the first with the last and the second with the third."
+    ],
+    "explanation": "Passing a small fixed-size array by value makes an independent copy. Returning that copy leaves the caller’s array unchanged.",
+    "starter": "#include <array>\n#include <utility>\n#include <stdexcept>\nstd::array<int,4> reversed(std::array<int,4> values)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "#include <array>\n#include <utility>\nstd::array<int, 4> reversed(std::array<int, 4> values) {\n    std::swap(values[0], values[3]);\n    std::swap(values[1], values[2]);\n    return values;\n}\n",
+    "tests": "std::array<int,4> a{1,2,3,4}; assert((reversed(a)==std::array<int,4>{4,3,2,1})); assert(a[0]==1); assert((reversed({5,5,5,5})==std::array<int,4>{5,5,5,5}));",
+    "beginnerOnly": false
+  },
+  {
+    "id": "prefix-totals",
+    "title": "Accumulate a running total",
+    "chapter": 16,
+    "url": "https://www.learncpp.com/cpp-tutorial/arrays-and-loops/",
+    "minutes": 15,
+    "topic": "Vectors and arrays",
+    "prompt": "Implement std::vector<int> runningTotals(const std::vector<int>& values). Each result element is the sum up to that position. At most 100 elements within -1000..1000.",
+    "hints": [
+      "Maintain a running sum and append it after every addition."
+    ],
+    "explanation": "The running accumulator is state carried from one loop iteration to the next. The result must have the same length as the input.",
+    "starter": "#include <vector>\n#include <stdexcept>\nstd::vector<int> runningTotals(const std::vector<int>& values)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "#include <vector>\nstd::vector<int> runningTotals(const std::vector<int> &values) {\n    std::vector<int> result;\n    int sum{};\n    for (int n : values) {\n        sum += n;\n        result.push_back(sum);\n    }\n    return result;\n}\n",
+    "tests": "assert((runningTotals({2,-1,4})==std::vector<int>{2,1,5})); assert(runningTotals({}).empty()); assert((runningTotals({0,0})==std::vector<int>{0,0}));",
+    "beginnerOnly": false
+  },
+  {
+    "id": "adjacent-compression",
+    "title": "Collapse neighboring duplicates",
+    "chapter": 16,
+    "url": "https://www.learncpp.com/cpp-tutorial/arrays-and-loops/",
+    "minutes": 15,
+    "topic": "Vectors and arrays",
+    "prompt": "Implement std::vector<int> collapse(const std::vector<int>& values), retaining only one value from each consecutive equal run. Do not remove separated duplicates.",
+    "hints": [
+      "Append if the result is empty or its last value differs."
+    ],
+    "explanation": "Consecutive duplication is different from global duplication. Tracking the most recently emitted value preserves order and later occurrences.",
+    "starter": "#include <vector>\n#include <stdexcept>\nstd::vector<int> collapse(const std::vector<int>& values)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "#include <vector>\nstd::vector<int> collapse(const std::vector<int> &values) {\n    std::vector<int> result;\n    for (int n : values)\n        if (result.empty() || result.back() != n)\n            result.push_back(n);\n    return result;\n}\n",
+    "tests": "assert((collapse({1,1,2,2,1})==std::vector<int>{1,2,1})); assert(collapse({}).empty()); assert((collapse({4,4,4})==std::vector<int>{4}));",
+    "beginnerOnly": false
+  },
+  {
+    "id": "safe-index",
+    "title": "Check an index before access",
+    "chapter": 16,
+    "url": "https://www.learncpp.com/cpp-tutorial/stdvector-and-the-unsigned-length-and-subscript-problem/",
+    "minutes": 15,
+    "topic": "Vectors and arrays",
+    "prompt": "Implement std::optional<int> atOrNone(const std::vector<int>& values,int index). Reject negative and out-of-range indices.",
+    "hints": [
+      "Check negativity before converting to the unsigned size type."
+    ],
+    "explanation": "Vector sizes are unsigned. Validating the signed index first avoids misleading signed/unsigned comparisons and invalid indexing.",
+    "starter": "#include <vector>\n#include <optional>\n#include <stdexcept>\nstd::optional<int> atOrNone(const std::vector<int>& values, int index)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "#include <optional>\n#include <vector>\nstd::optional<int> atOrNone(const std::vector<int> &values,\n                            int index) {\n    if (index < 0 ||\n        static_cast<std::size_t>(index) >= values.size())\n        return std::nullopt;\n    return values[static_cast<std::size_t>(index)];\n}\n",
+    "tests": "assert(!atOrNone({1,2},-1)); assert(!atOrNone({1,2},2)); assert(*atOrNone({1,2},1)==2); assert(!atOrNone({},0));",
+    "beginnerOnly": false
+  },
+  {
+    "id": "matrix-diagonal",
+    "title": "Read a nested fixed-size array",
+    "chapter": 17,
+    "url": "https://www.learncpp.com/cpp-tutorial/multidimensional-stdarray/",
+    "minutes": 15,
+    "topic": "Vectors and arrays",
+    "prompt": "Implement int trace(const std::array<std::array<int,3>,3>& matrix), summing the main diagonal. Elements are within -1000..1000.",
+    "hints": [
+      "For the main diagonal, row and column indices are equal."
+    ],
+    "explanation": "A nested array stores rows as its elements. Two subscripts first select a row and then an element within that row.",
+    "starter": "#include <array>\n#include <stdexcept>\nint trace(const std::array<std::array<int,3>,3>& matrix)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "#include <array>\nint trace(const std::array<std::array<int, 3>, 3> &matrix) {\n    int sum{};\n    for (std::size_t i{}; i < matrix.size(); ++i)\n        sum += matrix[i][i];\n    return sum;\n}\n",
+    "tests": "std::array<std::array<int,3>,3> m{{{1,8,9},{7,2,6},{5,4,3}}}; assert(trace(m)==6); assert(trace({})==0);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "sorted-copy",
+    "title": "Sort without changing the source",
+    "chapter": 18,
+    "url": "https://www.learncpp.com/cpp-tutorial/introduction-to-standard-library-algorithms/",
+    "minutes": 15,
+    "topic": "Algorithms and lambdas",
+    "prompt": "Implement std::vector<int> sorted(std::vector<int> values) using std::sort. Return ascending order.",
+    "hints": [
+      "Sort the local copy from begin() to end()."
+    ],
+    "explanation": "Standard algorithms work with iterator ranges. Passing by value lets the function rearrange its copy while preserving the caller’s sequence.",
+    "starter": "#include <vector>\n#include <algorithm>\n#include <stdexcept>\nstd::vector<int> sorted(std::vector<int> values)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "#include <algorithm>\n#include <vector>\nstd::vector<int> sorted(std::vector<int> values) {\n    std::sort(values.begin(), values.end());\n    return values;\n}\n",
+    "tests": "std::vector<int> v{3,1,2,1}; assert((sorted(v)==std::vector<int>{1,1,2,3})); assert(v[0]==3); assert(sorted({}).empty());",
+    "beginnerOnly": false
+  },
+  {
+    "id": "count-predicate",
+    "title": "Count values matching a condition",
+    "chapter": 20,
+    "url": "https://www.learncpp.com/cpp-tutorial/introduction-to-lambdas-anonymous-functions/",
+    "minutes": 15,
+    "topic": "Algorithms and lambdas",
+    "prompt": "Implement int countNegative(const std::vector<int>& values) using std::count_if and a lambda. At most 1000 elements.",
+    "hints": [
+      "The predicate receives an element and returns whether it should count."
+    ],
+    "explanation": "A lambda defines a small callable at the point of use. count_if applies the predicate to each element and counts true results.",
+    "starter": "#include <vector>\n#include <algorithm>\n#include <stdexcept>\nint countNegative(const std::vector<int>& values)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "#include <algorithm>\n#include <vector>\nint countNegative(const std::vector<int> &values) {\n    return static_cast<int>(\n        std::count_if(values.begin(), values.end(),\n                      [](int n) { return n < 0; }));\n}\n",
+    "tests": "assert(countNegative({-2,0,3,-1})==2); assert(countNegative({})==0); assert(countNegative({1,2})==0);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "find-position",
+    "title": "Translate an iterator into an index",
+    "chapter": 18,
+    "url": "https://www.learncpp.com/cpp-tutorial/introduction-to-iterators/",
+    "minutes": 15,
+    "topic": "Algorithms and lambdas",
+    "prompt": "Implement int indexOf(const std::vector<int>& values,int target) using std::find. Return the first matching index, or -1. At most 1000 elements.",
+    "hints": [
+      "Compare the iterator with end() before subtracting begin()."
+    ],
+    "explanation": "The end iterator is a sentinel one past the last element. It can be compared but must not be dereferenced.",
+    "starter": "#include <vector>\n#include <algorithm>\n#include <stdexcept>\nint indexOf(const std::vector<int>& values, int target)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "#include <algorithm>\n#include <vector>\nint indexOf(const std::vector<int> &values, int target) {\n    auto found =\n        std::find(values.begin(), values.end(), target);\n    return found == values.end()\n               ? -1\n               : static_cast<int>(found - values.begin());\n}\n",
+    "tests": "assert(indexOf({8,3,8},8)==0); assert(indexOf({8,3,8},3)==1); assert(indexOf({8},2)==-1); assert(indexOf({},2)==-1);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "all-predicate",
+    "title": "Check every element",
+    "chapter": 18,
+    "url": "https://www.learncpp.com/cpp-tutorial/introduction-to-standard-library-algorithms/",
+    "minutes": 15,
+    "topic": "Algorithms and lambdas",
+    "prompt": "Implement bool allEven(const std::vector<int>& values) using std::all_of. Empty input returns true.",
+    "hints": [
+      "Use a predicate testing n % 2 == 0."
+    ],
+    "explanation": "all_of answers whether there is no counterexample. An empty range has no counterexamples and therefore returns true.",
+    "starter": "#include <vector>\n#include <algorithm>\n#include <stdexcept>\nbool allEven(const std::vector<int>& values)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "#include <algorithm>\n#include <vector>\nbool allEven(const std::vector<int> &values) {\n    return std::all_of(values.begin(), values.end(),\n                       [](int n) { return n % 2 == 0; });\n}\n",
+    "tests": "assert(allEven({})); assert(allEven({-2,0,4})); assert(!allEven({2,3,4}));",
+    "beginnerOnly": false
+  },
+  {
+    "id": "captured-threshold",
+    "title": "Capture a comparison value",
+    "chapter": 20,
+    "url": "https://www.learncpp.com/cpp-tutorial/lambda-captures/",
+    "minutes": 15,
+    "topic": "Algorithms and lambdas",
+    "prompt": "Implement int above(const std::vector<int>& values,int threshold) using count_if and a lambda capturing threshold by value. At most 1000 elements.",
+    "hints": [
+      "Write [threshold] as the lambda capture list."
+    ],
+    "explanation": "A value capture stores a copy in the lambda object. The predicate can then use surrounding context while accepting only one element argument.",
+    "starter": "#include <vector>\n#include <algorithm>\n#include <stdexcept>\nint above(const std::vector<int>& values, int threshold)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "#include <algorithm>\n#include <vector>\nint above(const std::vector<int> &values, int threshold) {\n    return static_cast<int>(std::count_if(\n        values.begin(), values.end(),\n        [threshold](int n) { return n > threshold; }));\n}\n",
+    "tests": "assert(above({1,4,7,4},4)==1); assert(above({},0)==0); assert(above({-1,0,1},-2)==3);",
+    "beginnerOnly": false
+  },
+  {
+    "id": "erase-matches",
+    "title": "Remove matching elements",
+    "chapter": 18,
+    "url": "https://www.learncpp.com/cpp-tutorial/introduction-to-standard-library-algorithms/",
+    "minutes": 15,
+    "topic": "Algorithms and lambdas",
+    "prompt": "Implement void removeValue(std::vector<int>& values,int target) using C++20 std::erase. Preserve the order of survivors.",
+    "hints": [
+      "std::erase handles both rearrangement and size reduction."
+    ],
+    "explanation": "Removing elements changes the vector’s size. Iterator-based remove alone would only rearrange values; std::erase performs the whole operation.",
+    "starter": "#include <vector>\n#include <stdexcept>\nvoid removeValue(std::vector<int>& values, int target)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "#include <vector>\nvoid removeValue(std::vector<int> &values, int target) {\n    std::erase(values, target);\n}\n",
+    "tests": "std::vector<int> v{2,1,2,3}; removeValue(v,2); assert((v==std::vector<int>{1,3})); removeValue(v,9); assert(v.size()==2); std::vector<int> e; removeValue(e,0); assert(e.empty());",
+    "beginnerOnly": false
+  },
+  {
+    "id": "unique-sorted",
+    "title": "Sort and remove duplicates",
+    "chapter": 18,
+    "url": "https://www.learncpp.com/cpp-tutorial/introduction-to-standard-library-algorithms/",
+    "minutes": 15,
+    "topic": "Algorithms and lambdas",
+    "prompt": "Implement std::vector<int> uniqueSorted(std::vector<int> values). Return distinct values in ascending order using sort, unique, and erase.",
+    "hints": [
+      "unique returns the new logical end; erase the remaining tail."
+    ],
+    "explanation": "unique only collapses adjacent equal values. Sorting first brings equal values together, then erase reduces the physical size.",
+    "starter": "#include <vector>\n#include <algorithm>\n#include <stdexcept>\nstd::vector<int> uniqueSorted(std::vector<int> values)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "#include <algorithm>\n#include <vector>\nstd::vector<int> uniqueSorted(std::vector<int> values) {\n    std::sort(values.begin(), values.end());\n    values.erase(std::unique(values.begin(), values.end()),\n                 values.end());\n    return values;\n}\n",
+    "tests": "assert((uniqueSorted({3,1,3,2,1})==std::vector<int>{1,2,3})); assert(uniqueSorted({}).empty()); assert((uniqueSorted({7,7})==std::vector<int>{7}));",
+    "beginnerOnly": false
+  },
+  {
+    "id": "transform-values",
+    "title": "Transform a collection",
+    "chapter": 18,
+    "url": "https://www.learncpp.com/cpp-tutorial/introduction-to-standard-library-algorithms/",
+    "minutes": 15,
+    "topic": "Algorithms and lambdas",
+    "prompt": "Implement std::vector<int> squares(std::vector<int> values) using std::transform and a lambda. Each element is within -1000..1000.",
+    "hints": [
+      "Use values.begin() as both input and output starting position."
+    ],
+    "explanation": "transform applies a function to each element and writes results through an output iterator. In-place transformation is valid for this unary operation.",
+    "starter": "#include <vector>\n#include <algorithm>\n#include <stdexcept>\nstd::vector<int> squares(std::vector<int> values)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "#include <algorithm>\n#include <vector>\nstd::vector<int> squares(std::vector<int> values) {\n    std::transform(values.begin(), values.end(), values.begin(),\n                   [](int n) { return n * n; });\n    return values;\n}\n",
+    "tests": "assert((squares({-3,0,2})==std::vector<int>{9,0,4})); assert(squares({}).empty());",
+    "beginnerOnly": false
+  },
+  {
+    "id": "sorted-search",
+    "title": "Search a sorted range",
+    "chapter": 18,
+    "url": "https://www.learncpp.com/cpp-tutorial/introduction-to-standard-library-algorithms/",
+    "minutes": 15,
+    "topic": "Algorithms and lambdas",
+    "prompt": "Implement bool containsSorted(const std::vector<int>& values,int target) using std::binary_search. The input is guaranteed sorted in ascending order.",
+    "hints": [
+      "Do not sort again; rely on the stated precondition."
+    ],
+    "explanation": "Binary search repeatedly halves a sorted search range. Applying it to unsorted input violates its ordering precondition.",
+    "starter": "#include <vector>\n#include <algorithm>\n#include <stdexcept>\nbool containsSorted(const std::vector<int>& values, int target)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "#include <algorithm>\n#include <vector>\nbool containsSorted(const std::vector<int> &values,\n                    int target) {\n    return std::binary_search(values.begin(), values.end(),\n                              target);\n}\n",
+    "tests": "assert(containsSorted({1,2,2,9},2)); assert(containsSorted({1,2,9},9)); assert(!containsSorted({1,2,9},3)); assert(!containsSorted({},0));",
+    "beginnerOnly": false
+  },
+  {
+    "id": "stable-length-sort",
+    "title": "Keep equal-length names in order",
+    "chapter": 20,
+    "url": "https://www.learncpp.com/cpp-tutorial/introduction-to-lambdas-anonymous-functions/",
+    "minutes": 15,
+    "topic": "Algorithms and lambdas",
+    "prompt": "Implement std::vector<std::string> byLength(std::vector<std::string> values), sorting by increasing length while preserving the relative order of equal-length strings. Use stable_sort.",
+    "hints": [
+      "Compare sizes with <, never <=."
+    ],
+    "explanation": "stable_sort preserves input order among equivalent elements. Its comparison must be strict: comparing a value with itself should return false.",
+    "starter": "#include <vector>\n#include <string>\n#include <algorithm>\n#include <stdexcept>\nstd::vector<std::string> byLength(std::vector<std::string> values)\n{\n    // TODO: implement the task.\n    throw std::logic_error{\"Not implemented\"};\n}\n",
+    "solution": "#include <algorithm>\n#include <string>\n#include <vector>\nstd::vector<std::string>\nbyLength(std::vector<std::string> values) {\n    std::stable_sort(\n        values.begin(), values.end(),\n        [](const std::string &a, const std::string &b) {\n            return a.size() < b.size();\n        });\n    return values;\n}\n",
+    "tests": "assert((byLength({\"elm\",\"a\",\"oak\",\"be\"})==std::vector<std::string>{\"a\",\"be\",\"elm\",\"oak\"})); assert(byLength({}).empty()); assert((byLength({\"bb\",\"aa\"})==std::vector<std::string>{\"bb\",\"aa\"}));",
     "beginnerOnly": false
   }
 ]

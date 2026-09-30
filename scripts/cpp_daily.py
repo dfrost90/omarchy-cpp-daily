@@ -9,6 +9,8 @@ import os
 from pathlib import Path
 import shutil
 import signal
+import stat
+import uuid
 import subprocess
 import sys
 import tempfile
@@ -54,7 +56,7 @@ def recommend(state, today):
     due = [t for t in tasks if state['records'].get(t['id'], {}).get('due', '9999') <= today]
     if due:
         return min(due, key=lambda t: state['records'][t['id']]['due'])['id']
-    return next((t['id'] for t in tasks if not state['records'].get(t['id'], {}).get('completed')), tasks[0]['id'])
+    return next((t['id'] for t in tasks if not state['records'].get(t['id'], {}).get('completed')), None)
 
 
 def snapshot(state, now=None):
@@ -63,7 +65,8 @@ def snapshot(state, now=None):
     tasks = curriculum(state)
     selected = state.get('selected')
     if selected not in [t['id'] for t in tasks]:
-        selected = recommend(state, today)
+        selected = recommend(state, today) or tasks[0]['id']
+    next_task = recommend(state, today)
     task = dict(BY_ID[selected])
     task.pop('solution')  # only returned by the explicit reveal action
     task.pop('tests')
@@ -76,10 +79,12 @@ def snapshot(state, now=None):
     return dict(track=state['track'], task=task,
                 record=state['records'].get(selected, {}),
                 completed=sum(bool(state['records'].get(t['id'], {}).get('completed')) for t in tasks),
-                total=len(tasks), streak=streak, todayDone=today in dates,
+                total=len(tasks), catalogTotal=len(TASKS), streak=streak, todayDone=today in dates,
+                nextAvailable=next_task is not None and next_task != selected,
+                allPracticed=all(state['records'].get(t['id'], {}).get('completed') for t in tasks),
                 due=sum(state['records'].get(t['id'], {}).get('due', '9999') <= today for t in tasks),
                 workdir=str(DATA / 'exercises' / selected),
-                history=[dict(id=t['id'], title=t['title'], completed=bool(state['records'].get(t['id'], {}).get('completed'))) for t in tasks])
+                history=[dict(id=t['id'], title=t['title'], topic=t.get('topic', 'Core recap'), completed=bool(state['records'].get(t['id'], {}).get('completed'))) for t in tasks])
 
 
 def rate(state, task_id, confidence, now=None):
@@ -96,15 +101,83 @@ def rate(state, task_id, confidence, now=None):
         state['activity'].append(today)
 
 
+@contextmanager
+def directory_fd(path, create=False):
+    """Pin each directory component; never traverse symlinks (including parents)."""
+    path = Path(os.path.abspath(path))
+    fd = os.open('/', os.O_RDONLY | os.O_DIRECTORY | os.O_CLOEXEC)
+    try:
+        for part in path.parts[1:]:
+            if create:
+                try:
+                    os.mkdir(part, mode=0o700, dir_fd=fd)
+                except FileExistsError:
+                    pass
+            child = os.open(part, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_CLOEXEC, dir_fd=fd)
+            os.close(fd)
+            fd = child
+        yield fd
+    finally:
+        os.close(fd)
+
+
+def regular_or_missing(fd, name):
+    try:
+        info = os.stat(name, dir_fd=fd, follow_symlinks=False)
+    except FileNotFoundError:
+        return False
+    if not stat.S_ISREG(info.st_mode):
+        raise ValueError(f'Refusing unsafe exercise file {name}: expected a regular file, not a symlink or special file.')
+    return True
+
+
+def create_exercise_file(fd, name, text):
+    """Publish a complete new file atomically, without replacing any existing inode."""
+    if regular_or_missing(fd, name):
+        return
+    temporary = '.cpp-daily-' + uuid.uuid4().hex
+    raw = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW | os.O_CLOEXEC, 0o600, dir_fd=fd)
+    try:
+        with os.fdopen(raw, 'w', encoding='utf-8') as output:
+            output.write(text)
+            output.flush()
+            os.fsync(output.fileno())
+        try:
+            # Unlike rename/replace, link fails if a destination appeared during
+            # the write. It never opens the destination, even if it is a symlink.
+            os.link(temporary, name, src_dir_fd=fd, dst_dir_fd=fd, follow_symlinks=False)
+        except FileExistsError:
+            regular_or_missing(fd, name)
+            raise ValueError(f'Exercise file {name} changed during creation; retry after checking it.')
+        os.fsync(fd)
+    finally:
+        os.unlink(temporary, dir_fd=fd)
+
+
 def prepare(task):
     folder = DATA / 'exercises' / task['id']
-    folder.mkdir(parents=True, exist_ok=True)
-    source = folder / 'answer.cpp'
-    if not source.exists():
-        source.write_text('// C++ Daily — original practice exercise\n' + task['starter'])
-    # Only managed instructions are refreshed. Learner code is never replaced.
-    (folder / 'README.md').write_text(f"# {task['title']}\n\n{task['prompt']}\n\nReading: {task['url']}\n\nEdit answer.cpp, save, then use Check code in the widget.\nThe checker supplies main() and runs your code locally as your user.\nChecks cover behavior, not every style or explanation requirement.\n")
+    files = {
+        'answer.cpp': '// C++ Daily — original practice exercise\n' + task['starter'],
+        'README.md': f"# {task['title']}\n\n{task['prompt']}\n\nReading: {task['url']}\n\nEdit answer.cpp, save, then use Check code in the widget.\nThe checker supplies main() and runs your code locally as your user.\nChecks cover behavior, not every style or explanation requirement.\n",
+    }
+    with directory_fd(folder, create=True) as fd:
+        # Validate both names before creating anything. Existing regular files
+        # may belong to the learner, so preserve both code and instructions.
+        for name in files:
+            regular_or_missing(fd, name)
+        for name, text in files.items():
+            create_exercise_file(fd, name, text)
     return folder
+
+
+def copy_answer(folder, destination):
+    with directory_fd(folder) as fd:
+        raw = os.open('answer.cpp', os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK | os.O_CLOEXEC, dir_fd=fd)
+        with os.fdopen(raw, 'rb') as source:
+            if not stat.S_ISREG(os.fstat(source.fileno()).st_mode):
+                raise ValueError('Refusing unsafe answer.cpp: expected a regular file.')
+            with destination.open('wb') as output:
+                shutil.copyfileobj(source, output)
 
 
 def run_bounded(command, cwd, timeout):
@@ -141,7 +214,7 @@ def check(task, folder=None):
     with tempfile.TemporaryDirectory(prefix='cpp-daily-check-') as temp:
         temp = Path(temp)
         # Copy the learner file so includes never require shell quoting.
-        shutil.copyfile(folder / 'answer.cpp', temp / 'answer.cpp')
+        copy_answer(folder, temp / 'answer.cpp')
         (temp / 'check.cpp').write_text('#include <cassert>\n#include <cmath>\n#include <string>\n#include <type_traits>\n#include <initializer_list>\n#include "answer.cpp"\nint main() {\n' + task['tests'] + '\n}\n')
         passed, log = run_bounded([compiler, '-std=c++20', '-Wall', '-Wextra', '-Wpedantic', '-Wconversion', '-Wshadow', '-g', 'check.cpp', '-o', 'check'], temp, 30)
         if not passed:
@@ -149,7 +222,7 @@ def check(task, folder=None):
         passed, output = run_bounded([str(temp / 'check')], folder, 3)
         if not passed:
             return False, 'A check failed:\n' + output
-        return True, 'All behavior checks passed. Review the explanation, then rate your confidence.' + ('\nCompiler warnings:\n' + log if log else '')
+        return True, 'Checks passed. Rate your understanding below to save progress.' + ('\nCompiler warnings:\n' + log if log else '')
 
 
 def should_remind(state, now, enabled, time):
@@ -180,13 +253,13 @@ def main():
             if args.value not in ('beginner', 'returning'):
                 raise ValueError('Choose beginner or returning.')
             state['track'] = args.value
-            state['selected'] = recommend(state, now.date().isoformat())
+            state['selected'] = recommend(state, now.date().isoformat()) or state.get('selected')
         elif args.action == 'select':
             if args.value not in [t['id'] for t in curriculum(state)]:
                 raise ValueError('Unknown task in this track.')
             state['selected'] = args.value
         elif args.action == 'next':
-            state['selected'] = recommend(state, now.date().isoformat())
+            state['selected'] = recommend(state, now.date().isoformat()) or state.get('selected')
         elif args.action == 'start':
             folder = prepare(task)
             subprocess.Popen(['omarchy', 'launch', 'editor', str(folder / 'answer.cpp')], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
@@ -196,12 +269,12 @@ def main():
             extra['passed'] = passed
         elif args.action == 'solution':
             extra['solution'] = task['solution']
-            message = 'One possible solution. Compare the reasoning with your own approach.'
+            message = ''
         elif args.action == 'rate':
             if args.value not in ('again', 'good'):
                 raise ValueError('Choose again or good.')
             rate(state, task['id'], args.value, now)
-            message = 'Review saved. Choose Next task when you are ready.'
+            message = ''
         elif args.action == 'snooze':
             state['snooze'] = now.timestamp() + 3600
             state['reminded'] = None

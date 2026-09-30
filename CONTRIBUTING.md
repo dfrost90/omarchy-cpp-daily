@@ -9,7 +9,8 @@ For a new exercise, provide:
 - An original task, starter, hint, explanation, and reference solution.
 - Checks for normal and boundary cases; unfinished starters must fail them.
 - A reading link to the relevant concept, without copying website content.
-- A realistic time estimate and chapter association.
+- A realistic time estimate, topic group, and chapter association.
+- A direct C++ explanation that assumes no JavaScript, web, or other language background.
 
 Run `python3 -m unittest discover -s tests -v` and
 `omarchy plugin validate .` before submitting a pull request. For QML changes,

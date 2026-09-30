@@ -8,16 +8,17 @@ Free, open source, no account, subscription, API key, or telemetry.
 
 ## What is included
 
-- 18 original exercises with hints, explanations, reference solutions, and C++20 checks.
+- 100 original exercises with hints, explanations, reference solutions, and C++20 checks.
 - **Beginner**: two introductory function exercises followed by the core practice pack.
-- **Returning to C++**: 16 recap exercises through function overloading and default arguments.
+- **Returning to C++**: 98 exercises, starting with a 16-task recap through function overloading and default arguments.
 - Links to relevant **LearnCpp.com** explanations, opened in your browser.
 - Local progress, a daily streak, task browsing, and spaced reviews.
 - One daily reminder at a configurable local time (19:00 by default), with a one-hour snooze.
 - Theme-aware popup, keyboard-accessible controls, and an editor shortcut.
 
-This first release is a practice companion covering selected topics through
-chapter 11, not a complete C++ course or a replacement for LearnCpp. Beginners
+The practice pack continues into strings, loops, templates, references, classes,
+containers, and algorithms. See the [100-task curriculum](docs/curriculum.md).
+It is not a complete C++ course or a replacement for LearnCpp. Beginners
 should read the linked lessons and earlier prerequisites as needed.
 
 ## Install
@@ -30,12 +31,26 @@ Install missing packages using Omarchy's package menu.
 omarchy plugin add https://github.com/dfrost90/omarchy-cpp-daily --enable
 ```
 
-Click **C++** in the bar and choose a learning path. **Start practice** opens an
+Click the **C++ logo** in the bar and choose a learning path. **Open editor** opens an
 `answer.cpp` file. Supply the requested functions; the checker supplies `main()`.
 Save, return to the widget, and choose **Check code**. Compiler errors and failed
-assertions are shown in the popup. Your file is never overwritten on reopening.
+assertions are shown in the popup. Existing `answer.cpp` and `README.md` files are never overwritten on reopening.
+New exercise files are created atomically; symlinks and non-regular files are
+refused, including symlinks in the exercise directory path. If a collision is
+reported, inspect the named path and move it aside yourself before retrying.
 
-Hints and solutions are optional. When finished, choose **Review tomorrow** or
+Use the **Keep open** switch in the title row to pin the task while using your editor or the top bar.
+The pinned panel stays visible when opening an exercise or reading link; use
+**Close** (or Escape while focused) to dismiss it. Toggle Keep open off to return
+to normal popup behavior. Clicking the bar icon also closes the pinned panel; opening it again retains the
+Keep open setting. Pinning lasts for the current shell session.
+
+Use **All tasks** to search titles and topics, browse eight exercises per page, or change learning paths. Additional details
+are available in **About** and button tooltips.
+
+**Explain** shows a short C++ explanation without revealing the solution.
+Hints and solutions are optional. Reference solutions use indented, selectable
+C++ code with syntax highlighting. When finished, choose **Review tomorrow** or
 **Understood** to record your self-assessment, then **Next task**. A passing check
 alone does not mark completion. Checks verify behavior and selected types, not
 every style requirement or written explanation.
