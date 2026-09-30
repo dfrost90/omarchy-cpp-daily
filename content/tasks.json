@@ -1254,7 +1254,7 @@
     "explanation": "Member initializer lists initialize members before the constructor body runs. This differs from assigning new values after default initialization.",
     "starter": "class Interval { int low; int high; public: Interval(int a,int b); int width() const; };\n",
     "solution": "class Interval {\n    int low;\n    int high;\n\n  public:\n    Interval(int a, int b) : low{a}, high{b} {\n    }\n    int width() const {\n        return high - low;\n    }\n};\n",
-    "tests": "const Interval i{-2,5}; assert(i.width()==7); assert(Interval{3,3}.width()==0);",
+    "tests": "const Interval i{-2,5}; assert(i.width()==7); assert((Interval{3,3}.width()==0));",
     "beginnerOnly": false
   },
   {
